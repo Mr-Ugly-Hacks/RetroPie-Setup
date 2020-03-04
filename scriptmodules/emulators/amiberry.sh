@@ -14,11 +14,11 @@ rp_module_desc="Amiga emulator with JIT support (forked from uae4arm)"
 rp_module_help="ROM Extension: .adf .ipf .zip\n\nCopy your Amiga games to $romdir/amiga\n\nCopy the required BIOS files\nkick13.rom\nkick20.rom\nkick31.rom\nto $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/midwan/amiberry/master/COPYING"
 rp_module_section="opt"
-rp_module_flags="!x86"
+rp_module_flags="!all arm"
 
 function _get_platform_amiberry() {
     local platform="$__platform-sdl2"
-    if isPlatform "rpi" && ! isPlatform "kms"; then
+    if isPlatform "dispmanx"; then
         platform="$__platform"
     elif isPlatform "odroid-xu"; then
         platform="xu4"
@@ -33,6 +33,7 @@ function _get_platform_amiberry() {
 function depends_amiberry() {
     local depends=(autoconf libpng-dev libmpeg2-4-dev zlib1g-dev libguichan-dev libmpg123-dev libflac-dev libxml2-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev)
 
+    isPlatform "dispmanx" && depends+=(libraspberrypi-dev)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc)
 
     getDepends "${depends[@]}"

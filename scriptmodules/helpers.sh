@@ -219,6 +219,17 @@ function getDepends() {
             isPlatform "xbian" && required="xbian-package-firmware"
         fi
 
+        # handle our custom package alias LINUX-HEADERS
+        if [[ "$required" == "LINUX-HEADERS" ]]; then
+            if isPlatform "rpi"; then
+                required="raspberrypi-kernel-headers"
+            elif [[ -z "$__os_ubuntu_ver" ]]; then
+                required="linux-headers-$(uname -r)"
+            else
+                required="linux-headers-generic"
+            fi
+        fi
+
         # map libpng12-dev to libpng-dev for Stretch+
         if [[ "$required" == "libpng12-dev" ]] && compareVersions "$__os_debian_ver" ge 9;  then
             required="libpng-dev"
@@ -265,7 +276,7 @@ function getDepends() {
         # workaround to force installation of our fixed libsdl1.2 and custom compiled libsdl2
         local temp=()
         for required in ${packages[@]}; do
-            if isPlatform "videocore" && [[ "$required" == "libsdl1.2-dev" ]]; then
+            if [[ "$required" == "libsdl1.2-dev" ]]; then
                 if [[ "$__has_binaries" -eq 1 ]]; then
                     rp_callModule sdl1 install_bin
                 else

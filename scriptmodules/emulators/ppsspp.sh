@@ -36,6 +36,10 @@ function sources_ppsspp() {
     # set ARCH_FLAGS to our own CXXFLAGS (which includes GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 if needed)
     sed -i "s/^set(ARCH_FLAGS.*/set(ARCH_FLAGS \"$CXXFLAGS\")/" cmake/Toolchains/raspberry.armv7.cmake
 
+    # remove file(READ "/sys/firmware/devicetree/base/compatible" PPSSPP_PI_MODEL)
+    # as it fails when building in a chroot
+    sed -i "/^file(READ .*/d" cmake/Toolchains/raspberry.armv7.cmake
+
     # ensure Pi vendor libraries are available for linking of shared library
     sed -n -i "p; s/^set(CMAKE_EXE_LINKER_FLAGS/set(CMAKE_SHARED_LINKER_FLAGS/p" cmake/Toolchains/raspberry.armv?.cmake
 
@@ -139,7 +143,7 @@ function build_ppsspp() {
     if isPlatform "arm" && ! isPlatform "x11"; then
         params+=(-DARM_NO_VULKAN=ON)
     fi
-    if [ "$md_id" == "lr-ppsspp" ]; then
+    if [[ "$md_id" == "lr-ppsspp" ]]; then
         params+=(-DLIBRETRO=On)
         ppsspp_binary="lib/ppsspp_libretro.so"
     fi
