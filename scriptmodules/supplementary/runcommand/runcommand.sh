@@ -57,7 +57,7 @@
 ## used as well as other options from the runcommand GUI.
 ##
 ## If SAVE_NAME is included, that is used for loading and saving of video output
-## modes as well as SDL1 dispmanx settings for the current COMMAND. If omitted,
+## modes as well as rendering backend settings for the current COMMAND. If omitted,
 ## the binary name is used as a key for the loading and saving. The savename is
 ## also displayed in the video output menu (detailed below), so for our purposes
 ## we send the emulator module id, which is somewhat descriptive yet short.
@@ -73,7 +73,7 @@ LOG="/dev/shm/runcommand.log"
 RUNCOMMAND_CONF="$CONFIGDIR/all/runcommand.cfg"
 VIDEO_CONF="$CONFIGDIR/all/videomodes.cfg"
 EMU_CONF="$CONFIGDIR/all/emulators.cfg"
-DISPMANX_CONF="$CONFIGDIR/all/dispmanx.cfg"
+BACKENDS_CONF="$CONFIGDIR/all/backends.cfg"
 RETRONETPLAY_CONF="$CONFIGDIR/all/retronetplay.cfg"
 
 # modesetting tools
@@ -189,7 +189,7 @@ function get_params() {
         IS_SYS=0
         CONSOLE_OUT=1
         EMULATOR="$3"
-        # if we have an emulator name (such as module_id) we use that for storing/loading parameters for video output/dispmanx
+        # if we have an emulator name (such as module_id) we use that for storing/loading parameters for video mode / backend
         # if the parameter is empty we use the name of the binary (to avoid breakage with out of date emulationstation configs)
         [[ -z "$EMULATOR" ]] && EMULATOR="${COMMAND/% */}"
     fi
@@ -241,7 +241,7 @@ function get_all_tvs_modes() {
 
 function get_all_kms_modes() {
     declare -Ag MODE
-    local default_mode="$(echo "$KMS_BUFFER" | grep -m1 "^Mode:.*driver.*crtc")"
+    local default_mode="$(echo "$KMS_BUFFER" | grep -Em1 "^Mode:.*(driver|userdef).*crtc")"
     local crtc="$(echo "$default_mode" | awk '{ print $(NF-1) }')"
     local crtc_encoder="$(echo "$KMS_BUFFER" | grep "Encoder map:" | awk -v crtc="$crtc" '$5 == crtc { print $3 }')"
 
@@ -276,35 +276,55 @@ function get_all_kms_modes() {
 
 function get_all_x11_modes()
 {
-        declare -Ag MODE
-        local id
-        local info
-        local line
-        local verbose_info=()
-        local output="$($XRANDR --verbose | grep " connected" | awk '{ print $1 }')"
+    declare -Ag MODE
+    local id
+    local line
+    while read -r id; do
+        # populate CONNECTOR:0xID into an array
+        MODE_ID+=($id) # output:id as in (hdmi:0x44)
+        
+        read -r line
+        # array is x/y resolution @ vertical refresh rate ( details )
+        MODE[$id]="$line"
+    done < <( $XRANDR --verbose | awk '
+        # defines the type of line
+        # true is the "header" (output and id)
+        # false is the "description" (Mode: and everything that begins with a space)
+        { type = /^[^ \t]+/ }
+        
+        # Exit after the first output
+        type && output {exit} # New header and output set means new output
+        
+        # many outputs can be connected, but only the ones with the id are in use.
+        # output must be connected and have an (id)
+        type && / connected/ && /\(0x[0-9a-f]+\)/ {
+            output=$1; next
+        }
+        
+        # parse mode and lines
+        # If we are in a "description", and output is set (output being what we want)
+        # And if $2 is an id, we are in a video mode description line
+        !type && output && $2 ~ /^\(0x[0-9a-f]+\)$/ {
+            # Print CRTC identifier (CONNECTOR:0xID)
+            print output ":" substr($2,2,length($2)-2) # id
+            
+            # get rid of what we printed
+            $1="";$2=""
+            sub(/^[ \t]+/,"") # trim spaces
+            
+            # save rest of the line
+            info=$0
 
-        while read -r line; do
-            # scan for line that contains bracketed mode id
-            id="$(echo "$line" | awk '{ print $2 }' | grep "([0-9]\{1,\}x[0-9]\{1,\})")"
-
-            if [[ -n "$id" ]]; then
-                # strip brackets from mode id
-                id="$(echo ${id:1:-1})"
-
-                # extract extended details
-                verbose_info=($(echo "$line" | awk '{ for (i=3; i<=NF; ++i) print $i }'))
-
-                # extract x/y resolution, vertical refresh rate and append details
-                read -r line
-                info="$(echo "$line" | awk '{ print $3 }')"
-                read -r line
-                info+="x$(echo "$line" | awk '{ print $3 }') @ $(echo "$line" | awk '{ print $NF }') ("${verbose_info[*]}")"
-
-                # populate resolution into arrays
-                MODE_ID+=($output:$id)
-                MODE[$output:$id]="$info"
-            fi
-        done < <($XRANDR --verbose)
+            # Save width from the 2nd line of the video mode
+            getline; width=$3
+            
+            # Save height & vrefresh from the 3rd line of video mode
+            getline; height=$3; vrefresh=$NF
+            
+            # Print video mode details
+            print width "x" height " @ " vrefresh " (" info ")"
+        }
+    ')
 }
 
 function get_tvs_mode_info() {
@@ -344,7 +364,7 @@ function get_kms_mode_info() {
     local status
 
     if [[ -z "${mode_id[*]}" ]]; then
-	if [[ -n "${MODE[map-map]}" ]]; then
+        if [[ -n "${MODE[map-map]}" ]]; then
             # use mapped mode directly
             mode_id=(${MODE[map-map]})
         else
@@ -382,9 +402,9 @@ function get_x11_mode_info() {
 
     if [[ -z "$mode_id" ]]; then
         # determine current output
-        mode_id[0]="$($XRANDR --verbose | grep " connected" | awk '{ print $1 }')"
+        mode_id[0]="$($XRANDR --verbose | awk '/ connected/ { print $1;exit }')"
         # determine current mode id & strip brackets
-        mode_id[1]="$($XRANDR --verbose | grep " connected" | grep -o "([0-9]\{1,\}x[0-9]\{1,\})")"
+        mode_id[1]="$($XRANDR --verbose | awk '/ connected/ {print;exit}' | grep -o "(0x[a-f0-9]\{1,\})")"
         mode_id[1]="$(echo ${mode_id[1]:1:-1})"
     fi
 
@@ -496,7 +516,6 @@ function load_mode_defaults() {
     local temp
     MODE_ORIG=()
 
-
     if [[ -n "$HAS_MODESET" ]]; then
         # populate available modes
         [[ -z "$MODE_ID" ]] && get_all_${HAS_MODESET}_modes
@@ -506,9 +525,9 @@ function load_mode_defaults() {
         MODE_CUR=("${MODE_ORIG[@]}")
         MODE_ORIG_ID="${MODE_ORIG[0]}${separator}${MODE_ORIG[1]}"
 
-       if [[ "$MODE_REQ" == "0" ]]; then
+        if [[ "$MODE_REQ" == "0" ]]; then
             MODE_REQ_ID="$MODE_ORIG_ID"
-       elif [[ "$HAS_MODESET" == "tvs" ]]; then
+        elif [[ "$HAS_MODESET" == "tvs" ]]; then
             # get default mode for requested mode of 1 or 4
             if [[ "$MODE_REQ" =~ (1|4) ]]; then
                 # if current aspect is anything else like 5:4 / 10:9 just choose a 4:3 mode
@@ -928,6 +947,16 @@ echo "Set mode ${MODE_CUR[2]}x${MODE_CUR[3]}@${MODE_CUR[5]}Hz on \$XRANDR_OUTPUT
 _EOF_
             fi
 
+            if [[ "$XINIT_WM" -gt 0 ]]; then
+                local params=()
+                [[ "$XINIT_WM" -eq 1 ]] && params+=(-use_cursor no)
+                [[ "$XINIT_WM" -eq 2 ]] && params+=(-use_cursor yes)
+                cat >>"$xinitrc" <<_EOF_
+matchbox-window-manager ${params[@]} &
+sleep 0.5
+_EOF_
+            fi
+
             # echo command line for runcommand log
             cat >>"$xinitrc" <<_EOF_
 echo -e "\nExecuting (via xinit): "${COMMAND//\$/\\\$}"\n"
@@ -970,8 +999,12 @@ function mode_switch() {
     if [[ "$HAS_MODESET" == "kms" ]]; then
         # update the target resolution even though the underlying fb hasn't changed
         MODE_CUR=($(get_${HAS_MODESET}_mode_info "${mode_id[*]}"))
-        # inject the environment variables to do modesetting for SDL2 applications
-        command_prefix="SDL_VIDEO_KMSDRM_CRTCID=${MODE_CUR[0]} SDL_VIDEO_KMSDRM_MODEID=${MODE_CUR[1]}"
+
+        # check the mode tuple against the list of current available CRCTID/MODEID values
+        if [[ -n ${MODE["${MODE_CUR[0]}-${MODE_CUR[1]}"]} ]]; then
+            # inject the environment variables to do modesetting for SDL2 applications
+            command_prefix="SDL_VIDEO_KMSDRM_CRTCID=${MODE_CUR[0]} SDL_VIDEO_KMSDRM_MODEID=${MODE_CUR[1]}"
+        fi
         COMMAND="$(echo "$command_prefix $COMMAND" | sed -e "s/;/; $command_prefix /g")"
 
         return 0
@@ -1006,16 +1039,31 @@ function restore_fb() {
     switch_fb_res "${FB_ORIG[0]}x${FB_ORIG[1]}" "${FB_ORIG[2]}"
 }
 
-function config_dispmanx() {
-    # if we are running under X then don't try and use dispmanx
+function config_backend() {
+    # if we are running under X then don't try and use a different backend
     [[ -n "$DISPLAY" || "$XINIT" -eq 1 ]] && return
     local name="$1"
-    # if we have a dispmanx conf file and $name is in it (as a variable) and set to 1,
+    # if we have a backends.conf file and with an entry for the current emulator name, 
     # change the library path to load dispmanx sdl first
-    if [[ -f "$DISPMANX_CONF" ]]; then
-        iniConfig " = " '"' "$DISPMANX_CONF"
+    if [[ -f "$BACKENDS_CONF" ]]; then
+        iniConfig " = " '"' "$BACKENDS_CONF"
         iniGet "$name"
-        [[ "$ini_value" == "1" ]] && COMMAND="SDL1_VIDEODRIVER=dispmanx $COMMAND"
+        case "$ini_value" in
+            1|dispmanx)
+                if [[ "$HAS_MODESET" == "kms" ]]; then
+                    COMMAND="SDL_DISPMANX_WIDTH=${MODE_CUR[2]} SDL_DISPMANX_HEIGHT=${MODE_CUR[3]} $COMMAND"
+                fi
+                COMMAND="SDL1_VIDEODRIVER=dispmanx $COMMAND"
+                ;;
+            x11)
+                XINIT=1
+                XINIT_WM=1
+                ;;
+            x11-c)
+                XINIT=1
+                XINIT_WM=2
+                ;;
+        esac
     fi
 }
 
@@ -1162,6 +1210,8 @@ function show_launch() {
         images+=(
             "$HOME/RetroPie/roms/$SYSTEM/images/${ROM_BN}-image"
             "$HOME/.emulationstation/downloaded_images/$SYSTEM/${ROM_BN}-image"
+            "$HOME/.emulationstation/downloaded_media/$SYSTEM/screenshots/${ROM_BN}"
+            "$HOME/RetroPie/roms/$SYSTEM/media/screenshots/${ROM_BN}"
         )
     fi
 
@@ -1301,7 +1351,7 @@ function runcommand() {
 
     [[ -n "$FB_NEW" ]] && switch_fb_res $FB_NEW
 
-    config_dispmanx "$SAVE_EMU"
+    config_backend "$SAVE_EMU"
 
     # switch to configured cpu scaling governor
     [[ -n "$GOVERNOR" ]] && set_governor "$GOVERNOR"

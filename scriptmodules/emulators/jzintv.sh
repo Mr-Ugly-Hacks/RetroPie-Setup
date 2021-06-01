@@ -13,16 +13,19 @@ rp_module_id="jzintv"
 rp_module_desc="Intellivision emulator"
 rp_module_help="ROM Extensions: .int .bin\n\nCopy your Intellivision roms to $romdir/intellivision\n\nCopy the required BIOS files exec.bin and grom.bin to $biosdir"
 rp_module_licence="GPL2 http://spatula-city.org/%7Eim14u2c/intv/"
+rp_module_repo="file $__archive_url/jzintv-20181225.zip"
 rp_module_section="opt"
-rp_module_flags="dispmanx !mali"
+rp_module_flags="sdl1 !mali"
 
 function depends_jzintv() {
     getDepends libsdl1.2-dev
 }
 
 function sources_jzintv() {
-    downloadAndExtract "$__archive_url/jzintv-20181225.zip" "$md_build"
+    downloadAndExtract "$md_repo_url" "$md_build"
     cd jzintv/src
+    # aarch64 doesn't include sys/io.h - we can just remove it in this case
+    isPlatform "aarch64" && grep -rl "include.*sys/io.h" | xargs sed -i "/include.*sys\/io.h/d"
 }
 
 function build_jzintv() {
@@ -44,9 +47,7 @@ function install_jzintv() {
 function configure_jzintv() {
     mkRomDir "intellivision"
 
-    if ! isPlatform "x11"; then
-        setDispmanx "$md_id" 1
-    fi
+    ! isPlatform "x11" && setBackend "$md_id" "dispmanx"
 
     addEmulator 1 "$md_id" "intellivision" "$md_inst/bin/jzintv -p $biosdir -q %ROM%"
     addSystem "intellivision"

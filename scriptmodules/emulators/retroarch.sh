@@ -12,6 +12,7 @@
 rp_module_id="retroarch"
 rp_module_desc="RetroArch - frontend to the libretro emulator cores - required by all lr-* emulators"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/RetroArch/master/COPYING"
+rp_module_repo="git https://github.com/libretro/RetroArch.git v1.9.4"
 rp_module_section="core"
 
 function depends_retroarch() {
@@ -39,10 +40,10 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.4
-    applyPatch "$md_data/01_hotkey_hack.diff"
-    applyPatch "$md_data/02_disable_search.diff"
-    applyPatch "$md_data/03_shader_path_config_enable.diff"
+    gitPullOrClone
+    applyPatch "$md_data/01_disable_search.diff"
+    applyPatch "$md_data/02_shader_path_config_enable.diff"
+    applyPatch "$md_data/03_revert_default_save_paths.diff"
 }
 
 function build_retroarch() {
@@ -55,7 +56,11 @@ function build_retroarch() {
         params+=(--disable-ffmpeg)
     fi
     isPlatform "gles" && params+=(--enable-opengles)
-    isPlatform "gles3" && params+=(--enable-opengles3)
+    if isPlatform "gles3"; then
+        params+=(--enable-opengles3)
+        isPlatform "gles31" && params+=(--enable-opengles3_1)
+        isPlatform "gles32" && params+=(--enable-opengles3_2)
+    fi
     isPlatform "rpi" && isPlatform "mesa" && params+=(--disable-videocore)
     # Temporarily block dispmanx support for fkms until upstream support is fixed
     isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx --disable-opengl1)
@@ -157,9 +162,9 @@ function configure_retroarch() {
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
     iniSet "video_aspect_ratio_auto" "true"
-    iniSet "video_smooth" "false"
     iniSet "rgui_show_start_screen" "false"
     iniSet "rgui_browser_directory" "$romdir"
+    iniSet "rgui_switch_icons" "false"
 
     if ! isPlatform "x86"; then
         iniSet "video_threaded" "true"
@@ -167,6 +172,7 @@ function configure_retroarch() {
 
     iniSet "video_font_size" "24"
     iniSet "core_options_path" "$configdir/all/retroarch-core-options.cfg"
+    iniSet "global_core_options" "true"
     isPlatform "x11" && iniSet "video_fullscreen" "true"
     isPlatform "mesa" && iniSet "video_fullscreen" "true"
 
@@ -261,6 +267,9 @@ function configure_retroarch() {
 
     # enable video shaders on existing configs
     _set_config_option_retroarch "video_shader_enable" "true"
+
+    # (compat) keep all core options in a single file
+    _set_config_option_retroarch "global_core_options" "true"
 
     # remapping hack for old 8bitdo firmware
     addAutoConf "8bitdo_hack" 0

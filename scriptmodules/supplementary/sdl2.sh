@@ -11,8 +11,8 @@
 
 rp_module_id="sdl2"
 rp_module_desc="SDL (Simple DirectMedia Layer) v2.x"
-rp_module_licence="ZLIB https://hg.libsdl.org/SDL/raw-file/f426dbef4aa0/COPYING.txt"
-rp_module_section=""
+rp_module_licence="ZLIB https://raw.githubusercontent.com/libsdl-org/SDL/main/LICENSE.txt"
+rp_module_section="depends"
 rp_module_flags=""
 
 function get_ver_sdl2() {
@@ -23,7 +23,6 @@ function get_pkg_ver_sdl2() {
     local ver="$(get_ver_sdl2)+5"
     isPlatform "rpi" && ver+="rpi"
     isPlatform "mali" && ver+="mali"
-    isPlatform "vero4k" && ver+="mali"
     echo "$ver"
 }
 
@@ -61,7 +60,7 @@ function sources_sdl2() {
     local pkg_ver="$(get_pkg_ver_sdl2)"
     local branch="retropie-${ver}"
 
-    gitPullOrClone "$md_build/$pkg_ver" https://github.com/RetroPie/SDL-mirror "$branch"
+    gitPullOrClone "$md_build/$pkg_ver" https://github.com/RetroPie/SDL.git "$branch"
     cd "$pkg_ver"
     DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v "$pkg_ver" "SDL $ver configured for the $__platform"
 }
@@ -73,7 +72,7 @@ function build_sdl2() {
     cd "$(get_pkg_ver_sdl2)"
 
     if isPlatform "vero4k"; then
-        # remove harmful (mesa) and un-needed (X11) dependancies from debian package control
+        # remove harmful (mesa) and un-needed (X11) dependencies from debian package control
         sed -i '/^\s*lib.*x\|mesa/ d' ./debian/control
         # disable vulkan and X11 video support
         conf_flags+=("--disable-video-x11")
@@ -89,7 +88,7 @@ function build_sdl2() {
     sed -i 's/libgl1-mesa-dev,/libgl1-mesa-dev, '"${conf_depends[*]}"'/' ./debian/control
     sed -i 's/confflags =/confflags = '"${conf_flags[*]}"' \\\n/' ./debian/rules
 
-    if isPlatform "rpi"; then
+    if isPlatform "rpi" && [[ -d "/opt/vc/include" ]]; then
         # move proprietary videocore headers
         sed -i -e 's/\"EGL/\"brcmEGL/g' -e 's/\"GLES/\"brcmGLES/g' ./src/video/raspberry/SDL_rpivideo.h
         mv /opt/vc/include/EGL /opt/vc/include/brcmEGL
@@ -100,7 +99,7 @@ function build_sdl2() {
     # using the videocore pkgconfig will cause unwanted linkage, so disable it!
     PKG_CONFIG_PATH= dpkg-buildpackage -b
 
-    if isPlatform "rpi"; then
+    if isPlatform "rpi" && [[ -d "/opt/vc/include" ]]; then
         # restore proprietary headers
         mv /opt/vc/include/brcmEGL /opt/vc/include/EGL
         mv /opt/vc/include/brcmGLES /opt/vc/include/GLES
@@ -110,7 +109,15 @@ function build_sdl2() {
     md_ret_require="$md_build/libsdl2-dev_$(get_pkg_ver_sdl2)_$(get_arch_sdl2).deb"
     local dest="$__tmpdir/archives/$__binary_path"
     mkdir -p "$dest"
-    cp ../*.deb "$dest/"
+
+    local file
+    for file in ../*.deb; do
+        if gpg --list-secret-keys "$__gpg_signing_key" &>/dev/null; then
+            signFile "$file" || return 1
+            cp "${file}.asc" "$dest/"
+        fi
+        cp ../*.deb "$dest/"
+    done
 }
 
 function remove_old_sdl2() {
@@ -127,15 +134,22 @@ function install_sdl2() {
     echo "libsdl2-dev hold" | dpkg --set-selections
 }
 
+function __binary_url_sdl2() {
+    rp_hasBinaries && echo "$__binary_url/libsdl2-dev_$(get_pkg_ver_sdl2)_armhf.deb"
+}
+
 function install_bin_sdl2() {
-    if ! isPlatform "rpi"; then
-        md_ret_errors+=("$md_id is only available as a binary package for platform rpi")
-        return 1
+    local tmp="$(mktemp -d)"
+    pushd "$tmp" >/dev/null
+    local ret=1
+    if downloadAndVerify "$__binary_url/libsdl2-dev_$(get_pkg_ver_sdl2)_armhf.deb" && \
+       downloadAndVerify "$__binary_url/libsdl2-2.0-0_$(get_pkg_ver_sdl2)_armhf.deb"; then
+        install_sdl2
+        ret=0
     fi
-    wget -c "$__binary_url/libsdl2-dev_$(get_pkg_ver_sdl2)_armhf.deb"
-    wget -c "$__binary_url/libsdl2-2.0-0_$(get_pkg_ver_sdl2)_armhf.deb"
-    install_sdl2
-    rm ./*.deb
+    popd >/dev/null
+    rm -rf "$tmp"
+    return "$ret"
 }
 
 function revert_sdl2() {

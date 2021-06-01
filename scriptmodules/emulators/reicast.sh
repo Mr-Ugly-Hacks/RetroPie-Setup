@@ -13,23 +13,25 @@ rp_module_id="reicast"
 rp_module_desc="Dreamcast emulator Reicast"
 rp_module_help="ROM Extensions: .cdi .gdi\n\nCopy your Dreamcast roms to $romdir/dreamcast\n\nCopy the required BIOS files dc_boot.bin and dc_flash.bin to $biosdir/dc"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/reicast/reicast-emulator/master/LICENSE"
+rp_module_repo="git https://github.com/reicast/reicast-emulator.git master"
 rp_module_section="opt"
-rp_module_flags="!armv6 !mali"
+rp_module_flags="!armv6"
 
 function depends_reicast() {
-    local depends=(libsdl2-dev python-dev python-pip alsa-oss python-setuptools libevdev-dev libasound2-dev libudev-dev)
+    local depends=(libsdl2-dev python3-dev python3-pip alsa-oss python3-setuptools libevdev-dev libasound2-dev libudev-dev)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc)
     isPlatform "mesa" && depends+=(libgles2-mesa-dev)
     getDepends "${depends[@]}"
-    isPlatform "vero4k" && pip install wheel
-    pip install evdev
+    isPlatform "vero4k" && pip3 install wheel
+    pip3 install evdev
 }
 
 function sources_reicast() {
-    gitPullOrClone "$md_build" https://github.com/reicast/reicast-emulator.git master
+    gitPullOrClone
     applyPatch "$md_data/0001-enable-rpi4-sdl2-target.patch"
     applyPatch "$md_data/0002-enable-vsync.patch"
     applyPatch "$md_data/0003-fix-sdl2-sighandler-conflict.patch"
+    sed -i "s#/usr/bin/env python#/usr/bin/env python3#" shell/linux/tools/reicast-joyconfig.py
 }
 
 function _params_reicast() {
@@ -38,7 +40,7 @@ function _params_reicast() {
     local params=()
 
     # platform-specific params
-    if isPlatform "rpi"; then
+    if isPlatform "rpi" && isPlatform "32bit"; then
         # platform configuration
         if isPlatform "rpi4"; then
             platform="rpi4"
@@ -116,15 +118,16 @@ function configure_reicast() {
 
     chown -R $user:$user "$md_conf_root/dreamcast"
 
-    cat > "$romdir/dreamcast/+Start Reicast.sh" << _EOF_
+    if [[ "$md_mode" == "install" ]]; then
+        cat > "$romdir/dreamcast/+Start Reicast.sh" << _EOF_
 #!/bin/bash
 $md_inst/bin/reicast.sh
 _EOF_
-    chmod a+x "$romdir/dreamcast/+Start Reicast.sh"
-    chown $user:$user "$romdir/dreamcast/+Start Reicast.sh"
-
-    # remove old systemManager.cdi symlink
-    rm -f "$romdir/dreamcast/systemManager.cdi"
+        chmod a+x "$romdir/dreamcast/+Start Reicast.sh"
+        chown $user:$user "$romdir/dreamcast/+Start Reicast.sh"
+    else
+        rm "$romdir/dreamcast/+Start Reicast.sh"
+    fi
 
     if [[ "$md_mode" == "install" ]]; then
         # possible audio backends: alsa, oss, omx

@@ -12,10 +12,11 @@
 rp_module_id="runcommand"
 rp_module_desc="The 'runcommand' launch script - needed for launching the emulators from the frontend"
 rp_module_section="core"
+rp_module_flags="nonet"
 
 function _update_hook_runcommand() {
     # make sure runcommand is always updated when updating retropie-setup
-    rp_isInstalled "$md_idx" && install_bin_runcommand
+    rp_isInstalled "$md_id" && install_bin_runcommand
 }
 
 function depends_runcommand() {
@@ -31,7 +32,7 @@ function install_bin_runcommand() {
     cp "$md_data/joy2key.py" "$md_inst/"
     chmod a+x "$md_inst/runcommand.sh"
     chmod a+x "$md_inst/joy2key.py"
-    python -m compileall "$md_inst/joy2key.py"
+    python3 -m compileall "$md_inst/joy2key.py"
     if [[ ! -f "$configdir/all/runcommand.cfg" ]]; then
         mkUserDir "$configdir/all"
         iniConfig " = " '"' "$configdir/all/runcommand.cfg"
@@ -49,30 +50,45 @@ function install_bin_runcommand() {
 
     # needed for KMS modesetting (debian buster or later only)
     if compareVersions "$__os_debian_ver" ge 10; then
-        rp_installModule "$(rp_getIdxFromId mesa-drm)"
+        rp_installModule "mesa-drm" "_autoupdate_"
     fi
 
     md_ret_require="$md_inst/runcommand.sh"
 }
 
+function remove_runcommand() {
+    rp_callModule "mesa-drm" "remove"
+}
+
 function governor_runcommand() {
-    cmd=(dialog --backtitle "$__backtitle" --cancel-label "Back" --menu "Configure CPU Governor on command launch" 22 86 16)
+    local config="$configdir/all/runcommand.cfg"
+    iniConfig " = " '"' "$config"
+    iniGet "governor"
+
+    local current="$ini_value"
+    local default=1
+    local status="Default (don't change)"
+
+    [[ -n "$current" ]] && status="$current"
+
     local governors
     local governor
     local options=("1" "Default (don't change)")
     local i=2
     if [[ -f /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ]]; then
         for governor in $(</sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors); do
+            [[ "$current" == "$governor" ]] && default="$i"
             governors[$i]="$governor"
             options+=("$i" "Force $governor")
             ((i++))
         done
     fi
+    cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --cancel-label "Back" --menu "Configure CPU Governor on command launch\nCurrently: $status" 22 86 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         governor="${governors[$choice]}"
         iniSet "governor" "$governor"
-        chown $user:$user "$configdir/all/runcommand.cfg"
+        chown $user:$user "$config"
     fi
 }
 
@@ -91,7 +107,10 @@ function gui_runcommand() {
             'use_art=0' \
             'disable_joystick=0' \
             'image_delay=2' \
+            'governor=' \
         )"
+
+        [[ -z "$governor" ]] && governor="Default: don't change"
 
         cmd=(dialog --backtitle "$__backtitle" --cancel-label "Exit" --default-item "$default" --menu "Choose an option." 22 86 16)
         options=()
@@ -115,7 +134,7 @@ function gui_runcommand() {
         fi
 
         options+=(4 "Launch image delay in seconds (currently $image_delay)")
-        options+=(5 "CPU configuration")
+        options+=(5 "CPU governor configuration (currently: $governor)")
 
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break

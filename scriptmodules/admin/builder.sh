@@ -22,35 +22,22 @@ function module_builder() {
 
     local id
     for id in "${ids[@]}"; do
-        # if index get mod_id from array else we look it up
-        local md_id
-        local md_idx
-        if [[ "$id" =~ ^[0-9]+$ ]]; then
-            md_id="$(rp_getIdFromIdx $id)"
-            md_idx="$id"
-        else
-            md_idx="$(rp_getIdxFromId $id)"
-            md_id="$id"
-        fi
-
         # don't build binaries for modules with flag nobin
         # eg scraper which fails as go1.8 doesn't work under qemu
-        hasFlag "${__mod_flags[$md_idx]}" "nobin" && continue
+        hasFlag "${__mod_info[$id/flags]}" "nobin" && continue
 
-        ! fnExists "install_${md_id}" && continue
+        # if the module has no install_ function skip to the next module
+        ! fnExists "install_${id}" && continue
 
-        # skip already built archives, so we can retry failed modules
-        [[ -f "$__tmpdir/archives/$__binary_path/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
+        # if there is a not a newer version, skip to the next module
+        ! rp_hasNewerModule "$id" "source" && continue
 
         # build, install and create binary archive.
         # initial clean in case anything was in the build folder when calling
         local mode
-        for mode in clean remove depends sources build install create_bin clean remove "depends remove"; do
-            rp_callModule "$md_id" $mode
-            # return on error
-            [[ $? -eq 1 ]] && return 1
-            # no module found - skip to next module
-            [[ $? -eq 2 ]] && break
+        for mode in clean depends sources build install create_bin clean remove "depends remove"; do
+            # continue to next module if not available or an error occurs
+            rp_callModule "$id" $mode || break
         done
     done
     return 0
@@ -77,7 +64,7 @@ function chroot_build_builder() {
 
     local dist
     local dists="$__builder_dists"
-    [[ -z "$dists" ]] && dists="stretch buster"
+    [[ -z "$dists" ]] && dists="buster"
 
     local platform
     local platforms="$__builder_platforms"
@@ -96,7 +83,13 @@ function chroot_build_builder() {
         [[ ! -d "$md_build/$dist" ]] && rp_callModule image create_chroot "$dist" "$md_build/$dist"
         if [[ ! -d "$md_build/$dist/home/pi/RetroPie-Setup" ]]; then
             sudo -u $user git clone "$home/RetroPie-Setup" "$md_build/$dist/home/pi/RetroPie-Setup"
-            rp_callModule image chroot "$md_build/$dist" bash -c "sudo apt-get update; sudo apt-get install -y git"
+            gpg --export-secret-keys "$__gpg_signing_key" >"$md_build/$dist/retropie.key"
+            rp_callModule image chroot "$md_build/$dist" bash -c "\
+                sudo gpg --import "/retropie.key"; \
+                sudo rm "/retropie.key"; \
+                sudo apt-get update; \
+                sudo apt-get install -y git; \
+                "
         else
             sudo -u $user git -C "$md_build/$dist/home/pi/RetroPie-Setup" pull
         fi
@@ -109,13 +102,13 @@ function chroot_build_builder() {
 
             rp_callModule image chroot "$md_build/$dist" \
                 sudo \
-                MAKEFLAGS="$makeflags" \
+                __makeflags="$makeflags" \
                 DISTCC_HOSTS="$distcc_hosts" \
                 __platform="$platform" \
                 __has_binaries="$__chroot_has_binaries" \
                 /home/pi/RetroPie-Setup/retropie_packages.sh builder "$@"
         done
 
-        rsync -av "$md_build/$dist/home/pi/RetroPie-Setup/tmp/archives/" "$home/RetroPie-Setup/tmp/archives/"
+        rsync -av --exclude '*.pkg' "$md_build/$dist/home/pi/RetroPie-Setup/tmp/archives/" "$home/RetroPie-Setup/tmp/archives/"
     done
 }

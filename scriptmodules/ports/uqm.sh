@@ -26,7 +26,7 @@ function _update_hook_uqm() {
 
 function depends_uqm() {
     [[ "$__os_id" != "Raspbian" ]] && return 0
-    local depends=(debhelper devscripts libmikmod-dev libsdl1.2-dev libopenal-dev libsdl-image1.2-dev libogg-dev libvorbis-dev xz-utils)
+    local depends=(debhelper devscripts libmikmod-dev libsdl1.2-dev libopenal-dev libsdl-image1.2-dev libogg-dev libvorbis-dev)
     isPlatform "gl" || isPlatform "mesa" && depends+=(libgl1-mesa-dev)
     isPlatform "kms" && depends+=(xorg)
 
@@ -38,7 +38,7 @@ function sources_uqm() {
     local ver="$(_get_ver_uqm)"
     local url="http://http.debian.net/debian/pool/contrib/u/uqm"
     for file in uqm_$ver.dsc uqm_0.6.2.dfsg.orig.tar.gz uqm_$ver.debian.tar.xz; do
-        wget -nv -O"$file" "$url/$file"
+        download "$url/$file"
     done
 }
 
