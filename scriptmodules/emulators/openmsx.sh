@@ -56,13 +56,25 @@ function install_openmsx() {
 
 function configure_openmsx() {
     mkRomDir "msx"
-
-    addEmulator 0 "$md_id" "msx" "$md_inst/bin/openmsx %ROM%"
-    addEmulator 0 "$md_id-msx2" "msx" "$md_inst/bin/openmsx -machine 'Boosted_MSX2_EN' %ROM%"
-    addEmulator 0 "$md_id-msx2-plus" "msx" "$md_inst/bin/openmsx -machine 'Boosted_MSX2+_JP' %ROM%"
-    addEmulator 0 "$md_id-msx-turbor" "msx" "$md_inst/bin/openmsx -machine 'Panasonic_FS-A1GT' %ROM%"
-    addSystem "msx"
-
+    mkRomDir "msx2"
+	mkRomDir "msx2plus"
+	mkRomDir "msxturbo"
+	mkRomDir "spectravideo"
+    mkRomDir "coleco"
+	
+	addEmulator 0 "$md_id" "msx" "$md_inst/bin/openmsx %ROM%"
+	addSystem "msx"
+	addEmulator 0 "$md_id-msx2" "msx2" "$md_inst/bin/openmsx -m 'Boosted_MSX2_EN' %ROM%"
+	addSystem "msx2"
+	addEmulator 0 "$md_id-msx2+" "msx2plus" "$md_inst/bin/openmsx -m 'Boosted_MSX2+_JP' %ROM%"
+	addSystem "msx2plus"
+	addEmulator 0 "$md_id-msx-turbor" "msxturbo" "$md_inst/bin/openmsx -m 'Panasonic_FS-A1GT' %ROM%"
+	mkRomDir "msxturbo"
+	addEmulator 0 "$md_id" "spectravideo" "$md_inst/bin/openmsx %ROM%"
+    addSystem "spectravideo"
+	addEmulator 0 "$md_id" "coleco" "$md_inst/bin/openmsx -machine ColecoVision_SGM %ROM%"
+    addSystem "coleco"
+	ln -sfn "$biosdir/COLECO.ROM" "$md_inst/share/systemroms/COLECO.ROM"
     [[ $md_mode == "remove" ]] && return
 
     # Add a minimal configuration

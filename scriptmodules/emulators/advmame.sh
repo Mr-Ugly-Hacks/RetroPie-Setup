@@ -143,4 +143,20 @@ function configure_advmame() {
 
     addSystem "arcade"
     addSystem "mame-advmame"
+	#mess
+	addEmulator 0 "$md_id" "advision" "$md_inst/bin/advmess advision -cfg $md_conf_root/advision/advmess.rc -cart %ROM%"
+    addEmulator 0 "$md_id" "arcadia" "$md_inst/bin/advmess arcadia -cfg $md_conf_root/arcadia/advmess.rc -cart %ROM%"
+    addEmulator 0 "$md_id" "astrocde" "$md_inst/bin/advmess astrocde -cfg $md_conf_root/astrocade/advmess.rc -cart %ROM%"
+    addEmulator 0 "$md_id" "bbcbp128" "$md_inst/bin/advmess bbcb -cfg $md_conf_root/bbcbp128/advmess.rc -floppy %ROM%"
+    addEmulator 0 "$md_id" "channelf" "$md_inst/bin/advmess channelf -cfg $md_conf_root/channelf/advmess.rc -cart %ROM%"
+    addEmulator 0 "$md_id" "electron" "$md_inst/bin/advmess electron -cfg $md_conf_root/electron/advmess.rc -cass %ROM%"
+    addEmulator 0 "$md_id" "megaduck" "$md_inst/bin/advmess megaduck -cfg $md_conf_root/megaduck/advmess.rc -cart %ROM%"
+    addEmulator 0 "$md_id" "supervision" "$md_inst/bin/advmess svision -cfg $md_conf_root/supervision/advmess.rc -cart %ROM%"
+    
+local system
+    for system in arcadia astrocde bbcbp128 channelf electron svision advision megaduck; do
+        mkRomDir "$system"
+        addSystem "$system"	
+		
+done		
 }

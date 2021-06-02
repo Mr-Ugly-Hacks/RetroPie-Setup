@@ -71,17 +71,23 @@ _EOF_
 
     chmod +x "$md_inst/bin/vice.sh"
 
-    mkRomDir "c64"
-
+	local system
+    for system in c64 c128 pet plus4 vic20; do
+        mkRomDir "$system"
+        addSystem "$system"
+		cp -r "$scriptdir/configs/all/retrofe/medium_artwork" "$romdir/$system/"
+        cp -r "$scriptdir/configs/all/retrofe/system_artwork" "$romdir/$system/"
+		chown -R $user:$user "$romdir/$system"
+    done
+    
     addEmulator 1 "$md_id-x64" "c64" "$md_inst/bin/vice.sh x64 %ROM%"
-    addEmulator 0 "$md_id-x64dtv" "c64" "$md_inst/bin/vice.sh x64dtv %ROM%"
-    addEmulator 0 "$md_id-x64sc" "c64" "$md_inst/bin/vice.sh x64sc %ROM%"
-    addEmulator 0 "$md_id-x128" "c64" "$md_inst/bin/vice.sh x128 %ROM%"
-    addEmulator 0 "$md_id-xpet" "c64" "$md_inst/bin/vice.sh xpet %ROM%"
-    addEmulator 0 "$md_id-xplus4" "c64" "$md_inst/bin/vice.sh xplus4 %ROM%"
-    addEmulator 0 "$md_id-xvic" "c64" "$md_inst/bin/vice.sh xvic %ROM%"
-    addEmulator 0 "$md_id-xvic-cart" "c64" "$md_inst/bin/vice.sh xvic %ROM% -cartgeneric"
-    addSystem "c64"
+																		   
+	addEmulator 0 "$md_id-x64sc" "c64" "$md_inst/bin/vice.sh x64sc %ROM%"
+    addEmulator 1 "$md_id-x128" "c128" "$md_inst/bin/vice.sh x128 %ROM%"
+    addEmulator 1 "$md_id-xpet" "pet" "$md_inst/bin/vice.sh xpet %ROM%"
+    addEmulator 1 "$md_id-xplus4" "plus4" "$md_inst/bin/vice.sh xplus4 %ROM%"    
+    addEmulator 1 "$md_id-xvic" "vic20" "$md_inst/bin/vice.sh xvic %ROM%"
+    addEmulator 0 "$md_id-xvic-cart" "vic20" "$md_inst/bin/vice.sh xvic %ROM% -cartgeneric"
 
     [[ "$md_mode" == "remove" ]] && return
 
@@ -107,8 +113,11 @@ _EOF_
     if isPlatform "x11" || isPlatform "kms"; then
         iniSet "VICIIFullscreen" "1"
     fi
+	for system in c64 c128 pet plus4 vic20; do
+        copyDefaultConfig "$config" "$md_conf_root/$system/sdl-vicerc"
+    done      
 
-    copyDefaultConfig "$config" "$md_conf_root/c64/sdl-vicerc"
+    
     rm "$config"
 
     if ! isPlatform "x11"; then

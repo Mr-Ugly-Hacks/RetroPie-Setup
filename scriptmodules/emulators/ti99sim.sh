@@ -52,7 +52,11 @@ function install_ti99sim() {
 function configure_ti99sim() {
     mkRomDir "ti99"
 
-    addEmulator 1 "$md_id" "ti99" "$md_inst/ti99sim.sh -f %ROM%"
+    addEmulator 1 "$md_id-carts" "ti99" "$md_inst/ti99sim.sh --no-cf7 -f %ROM%"
+    addEmulator 0 "$md_id-xbasic+disk" "ti99" "$md_inst/ti99sim.sh --no-cf7 -f --dsk1=%ROM% "$romdir/ti99/xb.ctg"
+    addEmulator 0 "$md_id-xbasic+cf7" "ti99" "$md_inst/ti99sim.sh -f --cf7=%ROM% "$romdir/ti99/xb.ctg"
+    addEmulator 0 "$md_id-ea+disk" "ti99" "$md_inst/ti99sim.sh --no-cf7 -f --dsk1=%ROM% "$romdir/ti99/ea.ctg"
+    addEmulator 0 "$md_id-ea+cf7" "ti99" "$md_inst/ti99sim.sh -f --cf7=%ROM% "$romdir/ti99/ea.ctg"
     addSystem "ti99"
 
     [[ "$md_mode" == "remove" ]] && return
