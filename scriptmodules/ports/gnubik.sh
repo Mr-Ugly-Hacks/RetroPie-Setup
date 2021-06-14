@@ -15,9 +15,6 @@ rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="!mali !kms"
 
-function depends_gnubik() {
-    getDepends xorg matchbox guile-2.0-libs libatk1.0-0 libc6 libcaio2 libfontconfig1 libfreetype6 libgc1c2 libgdk-pixbuf2.0-0 libgl1-mesa-gix libglib2.0-0 libglu1-mesa libgtkglext1 libice6 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libpangox-1.0-0 libsm6 libx11-6 libxmu6 libxt6
-}
 
 function install_bin_gnubik() {
     [[ -f "$md_inst/gnubik" ]] && rm -rf "$md_inst/"*

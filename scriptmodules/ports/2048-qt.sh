@@ -15,9 +15,6 @@ rp_module_licence="PROP"
 rp_module_section="opt"
 rp_module_flags="!mali !kms"
 
-function depends_2048-qt() {
-    getDepends xorg matchbox libatomic1 libc6 libgcc1 libgl1-mesa-glx libgles2-mesa libqt5core5a libqt5gui5 libqt5network5 libqt5qml5 libqt5quick5 libqt5widgets5 libstdc++6 qmlmodule-qtquick-controls qml-module-qtquick-dialogs
-}
 
 function install_bin_2048-qt() {
     [[ -f "$md_inst/2048-qt" ]] && rm -rf "$md_inst/"*

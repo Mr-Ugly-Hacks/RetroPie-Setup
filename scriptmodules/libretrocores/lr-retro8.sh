@@ -17,7 +17,7 @@ rp_module_help="ROM Extensions: .p8 .png\n\nCopy your ROM files to $romdir/ports
 rp_module_licence="GPL3 https://raw.githubusercontent.com/Jakz/retro8/master/LICENSE"
 rp_module_repo="git https://github.com/Jakz/retro8.git"
 rp_module_section="exp"
-rp_module_flags="!all"
+rp_module_flags=""
 
 function depends_lr-retro8() {
     local depends=(libsdl2-dev liblua5.3-dev zlib1g-dev)

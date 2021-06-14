@@ -13,7 +13,7 @@ rp_module_id="xbill"
 rp_module_desc="XBill - Get rid of those viruses!"
 rp_module_licence="PROP"
 rp_module_section="exp"
-rp_module_flags="!mali !x86 !kms"
+rp_module_flags="!mali !kms"
 
 function depends_xbill() {
     getDepends xorg matchbox

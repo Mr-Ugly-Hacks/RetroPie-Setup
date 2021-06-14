@@ -15,9 +15,6 @@ rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="!mali !kms"
 
-function depends_plee-the-bear() {
-    getDepends xorg matchbox plee-the-bear-data libboost-filesystem1.62.0 libboost-regex1.62.0 libboost-thread1.62.0 libc6 libclaw-application1v5 libclaw-configuration-file1v5 libclaw-dynamic-library1v5 libclaw-graphic1v5 libclaw-logger1v5 libclaw-net1v5 libclaw-tween1v5 libgcc1 libgl1-mesa-glx libsdl-mixer1.2 libsdl1.2debian libstdc++6
-}
 
 function install_bin_plee-the-bear() {
     [[ -f "$md_inst/plee-the-bear" ]] && rm -rf "$md_inst/"*

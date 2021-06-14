@@ -14,7 +14,7 @@ rp_module_desc="gnash - Adobe Flash SWF Player"
 rp_module_help="ROM Extensions: .swf\n\nCopy your Flash games to $romdir/flash\n\nTo change resolution, open emulators.cfg and add parameters -j and -k with width and height values.\n\nSetting video mode to CEA-1 in runcommand and setting -j and -k to 640x480 yields best performance at the cost of image quality."
 rp_module_licence="GPL3 https://github.com/strk/gnash/blob/master/COPYING"
 rp_module_section="exp"
-rp_module_flags="!mali !kms"
+rp_module_flags="!mali !x86 !kms"
 
 function depends_gnash() {
 	getDepends xinit xorg
