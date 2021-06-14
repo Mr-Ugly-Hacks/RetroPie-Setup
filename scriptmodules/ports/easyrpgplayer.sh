@@ -17,7 +17,7 @@ rp_module_section="exp"
 rp_module_flags=""
 
 function depends_easyrpgplayer() {
-    getDepends libsdl2-dev libsdl2-mixer-dev libpng-dev libfreetype6-dev libboost-dev libpixman-1-dev libexpat1-dev zlib1g-dev autoconf automake libicu-dev libtool libfmt-dev libmpg123-dev libwildmidi-dev libxmp-dev libsndfile-dev
+    getDepends libsdl2-dev libsdl2-mixer-dev libpng-dev libfreetype6-dev libboost-dev libpixman-1-dev libexpat1-dev zlib1g-dev autoconf automake libicu-dev libtool libfmt-dev libmpg123-dev libwildmidi-dev libxmp-dev
 }
 
 function sources_easyrpgplayer() {
