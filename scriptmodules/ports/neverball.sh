@@ -15,10 +15,6 @@ rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="!mali !kms"
 
-function depends_neverball() {
-    getDepends xorg matchbox libgl1-mesa-glx libjpeg62-turbo libopenhmd0 libphysfs1 libpng16-16 libsdl2-2.0-0 libsdl2-ttf-2.0-0 libvorbisfile3 neverball-data
-}
-
 function install_bin_neverball() {
     [[ -f "$md_inst/neverball" ]] && rm -rf "$md_inst/"*
     aptInstall neverball
