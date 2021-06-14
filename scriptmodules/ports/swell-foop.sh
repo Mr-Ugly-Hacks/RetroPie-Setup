@@ -29,7 +29,7 @@ function remove_swell-foop() {
 }
 
 function configure_swell-foop() {
-    addPort "$md_id" "swell-foop" "swell-foop" "xinit $md_inst/swell-foop.sh"
+    addPort "$md_id" "swell-foop" "swell-foop" "$md_inst/swell-foop.sh"
 
     cat >"$md_inst/swell-foop.sh" << _EOF_
 #!/bin/bash

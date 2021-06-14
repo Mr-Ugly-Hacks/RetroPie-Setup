@@ -29,7 +29,7 @@ function remove_pipenightdreams() {
 }
 
 function configure_pipenightdreams() {
-    addPort "$md_id" "pipenightdreams" "PipeNightDreams" "xinit $md_inst/pipenightdreams.sh"
+    addPort "$md_id" "pipenightdreams" "PipeNightDreams" "$md_inst/pipenightdreams.sh"
 
     cat >"$md_inst/pipenightdreams.sh" << _EOF_
 #!/bin/bash

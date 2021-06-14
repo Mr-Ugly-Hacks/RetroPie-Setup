@@ -12,7 +12,7 @@
 rp_module_id="deadbeef"
 rp_module_desc="deadbeef - Music Player"
 rp_module_licence="MIT https://raw.githubusercontent.com/Alexey-Yakovenko/deadbeef/master/COPYING"
-rp_module_repo="https://github.com/Alexey-Yakovenko/deadbeef.git"
+rp_module_repo="https://github.com/DeaDBeeF-Player/deadbeef.git"
 rp_module_section="exp"
 rp_module_flags="!mali"
 

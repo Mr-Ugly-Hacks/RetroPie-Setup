@@ -26,7 +26,7 @@ function remove_gnubik() {
 }
 
 function configure_gnubik() {
-    addPort "$md_id" "gnubik" "gnubik" "xinit $md_inst/gnubik.sh"
+    addPort "$md_id" "gnubik" "gnubik" "$md_inst/gnubik.sh"
 
     cat >"$md_inst/gnubik.sh" << _EOF_
 #!/bin/bash

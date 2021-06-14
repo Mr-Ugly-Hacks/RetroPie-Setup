@@ -26,7 +26,7 @@ function remove_numptyphysics() {
 }
 
 function configure_numptyphysics() {
-    addPort "$md_id" "numptyphysics" "numptyphysics" "xinit $md_inst/numptyphysics.sh"
+    addPort "$md_id" "numptyphysics" "numptyphysics" "$md_inst/numptyphysics.sh"
 
     cat >"$md_inst/numptyphysics.sh" << _EOF_
 #!/bin/bash

@@ -29,7 +29,7 @@ function remove_tuxfootball() {
 }
 
 function configure_tuxfootball() {
-    addPort "$md_id" "tuxfootball" "tuxfootball" "xinit $md_inst/tuxfootball.sh"
+    addPort "$md_id" "tuxfootball" "tuxfootball" "$md_inst/tuxfootball.sh"
 
     cat >"$md_inst/tuxfootball.sh" << _EOF_
 #!/bin/bash

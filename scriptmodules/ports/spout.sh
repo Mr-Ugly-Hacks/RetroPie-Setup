@@ -29,7 +29,7 @@ function remove_spout() {
 }
 
 function configure_spout() {
-    addPort "$md_id" "spout" "spout" "xinit $md_inst/Spout.sh"
+    addPort "$md_id" "spout" "spout" "$md_inst/Spout.sh"
 
     cat >"$md_inst/Spout.sh" << _EOF_
 #!/bin/bash

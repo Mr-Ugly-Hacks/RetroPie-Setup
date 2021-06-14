@@ -29,7 +29,7 @@ function remove_gravitywars() {
 }
 
 function configure_gravitywars() {
-    addPort "$md_id" "gravitywars" "gravitywars" "xinit $md_inst/gravitywars.sh"
+    addPort "$md_id" "gravitywars" "gravitywars" "$md_inst/gravitywars.sh"
 
     cat >"$md_inst/gravitywars.sh" << _EOF_
 #!/bin/bash

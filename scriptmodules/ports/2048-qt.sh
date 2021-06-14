@@ -26,7 +26,7 @@ function remove_2048-qt() {
 }
 
 function configure_2048-qt() {
-    addPort "$md_id" "2048-qt" "2048-qt" "xinit $md_inst/2048-qt.sh"
+    addPort "$md_id" "2048-qt" "2048-qt" "$md_inst/2048-qt.sh"
 
     cat >"$md_inst/2048-qt.sh" << _EOF_
 #!/bin/bash

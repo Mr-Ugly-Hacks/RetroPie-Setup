@@ -29,7 +29,7 @@ function remove_mirrormagic() {
 }
 
 function configure_mirrormagic() {
-    addPort "$md_id" "mirrormagic" "mirrormagic" "xinit $md_inst/mirrormagic.sh"
+    addPort "$md_id" "mirrormagic" "mirrormagic" "$md_inst/mirrormagic.sh"
 
     cat >"$md_inst/mirrormagic.sh" << _EOF_
 #!/bin/bash

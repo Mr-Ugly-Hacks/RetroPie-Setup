@@ -14,7 +14,7 @@ rp_module_desc="Vorton - Highway Encounter Remake"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/zerojay/vorton/master/LICENSE"
 rp_module_repo="git https://github.com/zerojay/vorton.git"
 rp_module_section="exp"
-rp_module_flags="!x11 !mali"
+rp_module_flags="!mali"
 
 function depends_vorton() {
     getDepends libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev unzip

@@ -29,13 +29,13 @@ function remove_kobodeluxe() {
 }
 
 function configure_kobodeluxe() {
-    addPort "$md_id" "kobodeluxe" "kobodeluxe" "xinit $md_inst/kobodeluxe.sh"
+    addPort "$md_id" "kobodeluxe" "kobodeluxe" "$md_inst/kobodeluxe.sh"
 
     cat >"$md_inst/kobodeluxe.sh" << _EOF_
 #!/bin/bash
 xset -dpms s off s noblank
 matchbox-window-manager &
-kobodeluxe --fullscreen
+kobodl
 _EOF_
 sed -i "/kobodeluxe = \"DMT-4\"/" /opt/retroie/configs/all/videomodes.cfg
 

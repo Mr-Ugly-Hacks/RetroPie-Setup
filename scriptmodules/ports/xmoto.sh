@@ -26,7 +26,7 @@ function remove_xmoto() {
 }
 
 function configure_xmoto() {
-    addPort "$md_id" "xmoto" "XMoto" "xinit $md_inst/xmoto.sh"
+    addPort "$md_id" "xmoto" "XMoto" "$md_inst/xmoto.sh"
 
     cat >"$md_inst/xmoto.sh" << _EOF_
 #!/bin/bash

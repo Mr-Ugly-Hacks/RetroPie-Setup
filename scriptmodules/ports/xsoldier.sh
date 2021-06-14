@@ -29,7 +29,7 @@ function remove_xsoldier() {
 }
 
 function configure_xsoldier() {
-    addPort "$md_id" "xsoldier" "xsoldier" "xinit $md_inst/xsoldier.sh"
+    addPort "$md_id" "xsoldier" "xsoldier" "$md_inst/xsoldier.sh"
 
     cat >"$md_inst/xsoldier.sh" << _EOF_
 #!/bin/bash

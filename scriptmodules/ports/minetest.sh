@@ -29,7 +29,7 @@ function remove_minetest() {
 }
 
 function configure_minetest() {
-    addPort "$md_id" "minetest" "minetest" "xinit $md_inst/Minetest.sh"
+    addPort "$md_id" "minetest" "minetest" "$md_inst/Minetest.sh"
 
     cat >"$md_inst/Minetest.sh" << _EOF_
 #!/bin/bash

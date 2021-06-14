@@ -29,7 +29,7 @@ function remove_xjump() {
 }
 
 function configure_xjump() {
-    addPort "$md_id" "xjump" "XJump" "xinit $md_inst/xjump.sh"
+    addPort "$md_id" "xjump" "XJump" "$md_inst/xjump.sh"
 
     cat >"$md_inst/xjump.sh" << _EOF_
 #!/bin/bash

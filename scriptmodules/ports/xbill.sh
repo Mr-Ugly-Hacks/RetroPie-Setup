@@ -29,7 +29,7 @@ function remove_xbill() {
 }
 
 function configure_xbill() {
-    addPort "$md_id" "xbill" "xbill" "xinit $md_inst/xbill.sh"
+    addPort "$md_id" "xbill" "xbill" "$md_inst/xbill.sh"
 
     cat >"$md_inst/xbill.sh" << _EOF_
 #!/bin/bash

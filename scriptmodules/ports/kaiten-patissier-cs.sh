@@ -12,7 +12,7 @@
 rp_module_id="kaiten-patissier-cs"
 rp_module_desc="Kaiten Patissier Championship - RotateGear"
 rp_module_section="exp"
-rp_module_flags="!x11 !mali"
+rp_module_flags="!mali"
 
 function depends_kaiten-patissier-cs() {
     getDepends libsdl1.2-dev libsdl-gfx1.2-dev libsdl-mixer1.2-dev unzip

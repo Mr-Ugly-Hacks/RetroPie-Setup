@@ -29,7 +29,7 @@ function remove_caveexpress() {
 }
 
 function configure_caveexpress() {
-    addPort "$md_id" "caveexpress" "caveexpress" "xinit $md_inst/caveexpress.sh"
+    addPort "$md_id" "caveexpress" "caveexpress" "$md_inst/caveexpress.sh"
     cat >"$md_inst/caveexpress.sh" << _EOF_
 #!/bin/bash
 xset -dpms s off s noblank

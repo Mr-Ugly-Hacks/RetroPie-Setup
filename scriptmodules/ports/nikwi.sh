@@ -29,7 +29,7 @@ function remove_nikwi() {
 }
 
 function configure_nikwi() {
-    addPort "$md_id" "nikwi" "nikwi" "xinit $md_inst/nikwi.sh"
+    addPort "$md_id" "nikwi" "nikwi" "$md_inst/nikwi.sh"
 
     cat >"$md_inst/nikwi.sh" << _EOF_
 #!/bin/bash

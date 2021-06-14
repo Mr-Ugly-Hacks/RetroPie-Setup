@@ -34,5 +34,5 @@ xterm -rv /usr/games/tf
 _EOF_
     chmod +x "$romdir/ports/tinyfugue.sh"
 
-    addPort "$md_id" "tinyfugue" "TinyFugue - Console MUD Client" "xinit $romdir/ports/tinyfugue.sh"
+    addPort "$md_id" "tinyfugue" "TinyFugue - Console MUD Client" "$romdir/ports/tinyfugue.sh"
 }

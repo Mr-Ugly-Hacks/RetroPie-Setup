@@ -29,7 +29,7 @@ function remove_heroes() {
 }
 
 function configure_heroes() {
-    addPort "$md_id" "heroes" "heroes" "xinit $md_inst/heroes.sh"
+    addPort "$md_id" "heroes" "heroes" "$md_inst/heroes.sh"
 
     cat >"$md_inst/heroes.sh" << _EOF_
 #!/bin/bash

@@ -26,7 +26,7 @@ function remove_plee-the-bear() {
 }
 
 function configure_plee-the-bear() {
-    addPort "$md_id" "plee-the-bear" "plee-the-bear" "xinit $md_inst/plee-the-bear.sh"
+    addPort "$md_id" "plee-the-bear" "plee-the-bear" "$md_inst/plee-the-bear.sh"
 
     cat >"$md_inst/plee-the-bear.sh" << _EOF_
 #!/bin/bash

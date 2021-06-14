@@ -29,7 +29,7 @@ function remove_oneisenough() {
 }
 
 function configure_oneisenough() {
-    addPort "$md_id" "oneisenough" "oneisenough" "xinit $md_inst/oneisenough.sh"
+    addPort "$md_id" "oneisenough" "oneisenough" "$md_inst/oneisenough.sh"
 
     cat >"$md_inst/oneisenough.sh" << _EOF_
 #!/bin/bash

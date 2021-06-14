@@ -29,7 +29,7 @@ function remove_blobwars() {
 }
 
 function configure_blobwars() {
-    addPort "$md_id" "blobwars" "blobwars" "xinit $md_inst/blobwars.sh"
+    addPort "$md_id" "blobwars" "blobwars" "$md_inst/blobwars.sh"
 
     cat >"$md_inst/blobwars.sh" << _EOF_
 #!/bin/bash

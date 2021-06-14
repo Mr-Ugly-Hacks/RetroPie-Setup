@@ -23,7 +23,7 @@ function depends_openxcom() {
 
 function sources_openxcom() {
     gitPullOrClone
- 
+ }
 function build_openxcom() {
     cd "$md_build/src"
     CXXFLAGS="" make -f Makefile.simple
@@ -43,5 +43,5 @@ function install_openxcom() {
 function configure_openxcom() {
     mkdir "ports"
     moveConfigDir "$home/.config/openxcom" "$md_conf_root/openxcom"
-    addPort "$md_id" "openxcom" "OpenXCOM - Open Source X-COM Engine" "pushd $md_inst; sudo xinit $md_inst/openxcom; popd"
+    addPort "$md_id" "openxcom" "OpenXCOM - Open Source X-COM Engine" "pushd $md_inst; $md_inst/openxcom; popd"
 }

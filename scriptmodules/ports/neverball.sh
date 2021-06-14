@@ -25,7 +25,7 @@ function remove_neverball() {
 }
 
 function configure_neverball() {
-    addPort "$md_id" "neverball" "neverball" "xinit $md_inst/neverball.sh"
+    addPort "$md_id" "neverball" "neverball" "$md_inst/neverball.sh"
 
     cat >"$md_inst/neverball.sh" << _EOF_
 #!/bin/bash

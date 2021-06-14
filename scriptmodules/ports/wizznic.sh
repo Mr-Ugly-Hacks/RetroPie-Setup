@@ -14,7 +14,7 @@ rp_module_desc="Wizznic - Puzznic clone"
 rp_module_section="exp"
 rp_module_flags=""
 
-function depends_wizznic() {
+function install_bin_wizznic() {
     aptInstall wizznic
 }
  

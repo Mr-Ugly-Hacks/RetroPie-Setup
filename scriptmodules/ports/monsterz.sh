@@ -29,7 +29,7 @@ function remove_monsterz() {
 }
 
 function configure_monsterz() {
-    addPort "$md_id" "monsterz" "monsterz" "xinit $md_inst/monsterz.sh"
+    addPort "$md_id" "monsterz" "monsterz" "$md_inst/monsterz.sh"
 
     cat >"$md_inst/monsterz.sh" << _EOF_
 #!/bin/bash

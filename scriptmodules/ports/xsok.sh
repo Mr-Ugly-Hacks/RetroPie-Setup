@@ -29,7 +29,7 @@ function remove_xsokoban() {
 }
 
 function configure_xsokoban() {
-    addPort "$md_id" "xsokoban" "xsokoban" "xinit $md_inst/xsok.sh"
+    addPort "$md_id" "xsokoban" "xsokoban" "$md_inst/xsok.sh"
 
     cat >"$md_inst/xsok.sh" << _EOF_
 #!/bin/bash

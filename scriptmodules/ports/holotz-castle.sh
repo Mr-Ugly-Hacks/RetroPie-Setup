@@ -29,7 +29,7 @@ function remove_holotz-castle() {
 }
 
 function configure_holotz-castle() {
-    addPort "$md_id" "holotz-castle" "holotz-castle" "xinit $md_inst/Holotz-Castle.sh"
+    addPort "$md_id" "holotz-castle" "holotz-castle" "$md_inst/Holotz-Castle.sh"
 
     cat >"$md_inst/Holotz-Castle.sh" << _EOF_
 #!/bin/bash

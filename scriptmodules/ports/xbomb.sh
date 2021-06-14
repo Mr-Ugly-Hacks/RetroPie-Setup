@@ -29,7 +29,7 @@ function remove_xbomb() {
 }
 
 function configure_xbomb() {
-    addPort "$md_id" "xbomb" "xbomb" "xinit $md_inst/xbomb.sh"
+    addPort "$md_id" "xbomb" "xbomb" "$md_inst/xbomb.sh"
 
     cat >"$md_inst/xbomb.sh" << _EOF_
 #!/bin/bash
