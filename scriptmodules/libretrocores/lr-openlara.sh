@@ -15,7 +15,7 @@ rp_module_help="ROM Extensions: .PHD .PNG .PSX .SAT .TR2\nAudio Extensions: .ogg
 rp_module_licence="BSD 2-Clause https://raw.githubusercontent.com/libretro/OpenLara/master/LICENSE"
 rp_module_repo="git https://github.com/libretro/OpenLara.git"
 rp_module_section="exp"
-rp_module_flags="!all"
+rp_module_flags="!all 64bit"
 
 function sources_lr-openlara() {
     gitPullOrClone

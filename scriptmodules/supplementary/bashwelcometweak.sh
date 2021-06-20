@@ -135,6 +135,19 @@ function retropie_welcome() {
 }
 
 retropie_welcome
+# Common Aliases
+alias alsa='alsamixer'
+alias autostart='sudo nano /opt/retropie/configs/all/autostart.sh'
+alias configs='cd /opt/retropie/configs'
+alias fstab='sudo nano /etc/fstab'
+alias gitreset='cd ~/RetroPie-Setup && git reset --hard && git clean -f -d && cd ~'
+alias ifconfig='ip address'
+alias log='sudo nano /dev/shm/runcommand.log'
+alias rclocal='sudo nano /etc/rc.local'
+alias reboot='sudo reboot -h now'
+alias setup='sudo ~/RetroPie-Setup/retropie_setup.sh'
+alias shutdown='sudo shutdown -h now'
+alias upgrade='sudo apt-get update && sudo apt-get upgrade -y'					  
 # RETROPIE PROFILE END
 _EOF_
 

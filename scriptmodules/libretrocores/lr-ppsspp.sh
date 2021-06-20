@@ -38,7 +38,10 @@ function install_lr-ppsspp() {
 
 function configure_lr-ppsspp() {
     mkRomDir "psp"
+	mkRomDir "pspminis"
     ensureSystemretroconfig "psp"
+	ensureSystemretroconfig "pspminis"
+	
 
     if [[ "$md_mode" == "install" ]]; then
         mkUserDir "$biosdir/PPSSPP"
@@ -47,5 +50,7 @@ function configure_lr-ppsspp() {
     fi
 
     addEmulator 1 "$md_id" "psp" "$md_inst/ppsspp_libretro.so"
+	addEmulator 1 "$md_id" "pspminis" "$md_inst/ppsspp_libretro.so"
     addSystem "psp"
+	addSystem "pspminis"
 }

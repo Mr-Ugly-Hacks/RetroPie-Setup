@@ -57,7 +57,10 @@ function configure_zesarux() {
     mkRomDir "zxspectrum"
     mkRomDir "amstradcpc"
     mkRomDir "samcoupe"
-
+	mkRomDir "zx81"
+    mkRomDir "jupace"
+    mkRomDir "ql"
+	
     mkUserDir "$md_conf_root/zxspectrum"
 
     cat > "$romdir/zxspectrum/+Start ZEsarUX.sh" << _EOF_
@@ -104,7 +107,13 @@ _EOF_
     addEmulator 1 "$md_id" "zxspectrum" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh %ROM%"
     addEmulator 1 "$md_id" "samcoupe" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh --machine sam %ROM%"
     addEmulator 1 "$md_id" "amstradcpc" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh --machine CPC464 %ROM%"
+    addEmulator 1 "$md_id" "zx81" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh --machine ZX81 %ROM%"
+    addEmulator 1 "$md_id" "jupace" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh --machine ACE %ROM%"
+    addEmulator 1 "$md_id" "ql" "bash $romdir/zxspectrum/+Start\ ZEsarUX.sh --machine QL %ROM%"
     addSystem "zxspectrum"
-    addSystem "samcoupe"
-    addSystem "amstradcpc"
+	addSystem "samcoupe"
+	addSystem "amstradcpc"
+	addSystem "zx81"
+	addSystem "jupace"
+	addSystem "ql"
 }

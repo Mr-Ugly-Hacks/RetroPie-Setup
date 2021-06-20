@@ -43,16 +43,17 @@ function install_sdltrs() {
 
 function configure_sdltrs() {
     local common_args
-    mkRomDir "trs-80"
+	common_args="-fullscreen -nomousepointer -showled"
+    mkRomDir "trs-80-1"
+	mkRomDir "trs-80-3"
+	mkRomDir "trs-80-4"
+    addEmulator 1 "$md_id-model1" "trs-80-1" "$md_inst/sdl2trs $common_args -m1 -romfile $biosdir/level2.rom -disk0 %ROM%"
+    addEmulator 0 "$md_id-model3" "trs-80-3" "$md_inst/sdl2trs $common_args -m3 -romfile3 $biosdir/level3.rom -disk0 %ROM%"
+    addEmulator 0 "$md_id-model4" "trs-80-4" "$md_inst/sdl2trs $common_args -m4 -romfile3 $biosdir/level4.rom -disk0 %ROM%"
+    addEmulator 0 "$md_id-model4p" "trs-80-4" "$md_inst/sdl2trs $common_args -m4p -romfile4p $biosdir/level4p.rom -disk0 %ROM%"				 
+					  
 
-    common_args="-fullscreen -nomousepointer -showled"
-    addEmulator 1 "$md_id-model1" "trs-80" "$md_inst/sdl2trs $common_args -m1 -romfile $biosdir/level2.rom -disk0 %ROM%"
-    addEmulator 0 "$md_id-model3" "trs-80" "$md_inst/sdl2trs $common_args -m3 -romfile3 $biosdir/level3.rom -disk0 %ROM%"
-    addEmulator 0 "$md_id-model4" "trs-80" "$md_inst/sdl2trs $common_args -m4 -romfile3 $biosdir/level4.rom -disk0 %ROM%"
-    addEmulator 0 "$md_id-model4p" "trs-80" "$md_inst/sdl2trs $common_args -m4p -romfile4p $biosdir/level4p.rom -disk0 %ROM%"
-    addSystem "trs-80"
-
-    [[ "$md_mode" == "remove" ]] && return
+[[ "$md_mode" == "remove" ]] && return
 
     # Migrate settings from the previous version
     if [[ -h "$home/sdltrs.t8c" || -f "$home/sdltrs.t8c" ]]; then
@@ -70,4 +71,13 @@ function configure_sdltrs() {
     copyDefaultConfig "$config" "$md_conf_root/trs-80/sdltrs.t8c"
 
     moveConfigFile "$home/.sdltrs.t8c" "$md_conf_root/trs-80/sdltrs.t8c"
+    local rom
+    for rom in level2.rom level3.rom level4.rom level4p.rom; do
+        ln -sf "$biosdir/$rom" "$md_inst/$rom"
+    done
+    
+    addSystem "trs-80-1"
+	addSystem "trs-80-3"
+	addSystem "trs-80-4"
+	
 }

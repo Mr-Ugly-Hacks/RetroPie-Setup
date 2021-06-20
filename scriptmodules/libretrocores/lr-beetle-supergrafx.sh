@@ -33,9 +33,13 @@ function install_lr-beetle-supergrafx() {
 }
 
 function configure_lr-beetle-supergrafx() {
-    mkRomDir "pcengine"
-    ensureSystemretroconfig "pcengine"
+    local system
+    for system in pcengine supergrafx pce-cd tg16 tg-cd ; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"
 
-    addEmulator 0 "$md_id" "pcengine" "$md_inst/mednafen_supergrafx_libretro.so"
-    addSystem "pcengine"
+        addEmulator 1 "$md_id" "$system" "$md_inst/mednafen_supergrafx_libretro.so"
+        addSystem "$system"
+		
+    done
 }

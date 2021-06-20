@@ -51,6 +51,6 @@ function configure_px68k() {
         ln -sf "$biosdir/keropi/$bios" "$md_conf_root/x68000/$bios"
     done
 
-    addEmulator 1 "$md_id" "x68000" "$md_inst/px68k %ROM%"
+    addEmulator 0 "$md_id" "x68000" "$md_inst/px68k %ROM%"
     addSystem "x68000"
 }

@@ -40,11 +40,15 @@ function install_lr-snes9x2002() {
 }
 
 function configure_lr-snes9x2002() {
-    mkRomDir "snes"
-    ensureSystemretroconfig "snes"
-
-    local def=0
-    isPlatform "armv6" && def=1
-    addEmulator $def "$md_id" "snes" "$md_inst/snes9x2002_libretro.so"
-    addSystem "snes"
+    local system
+    for system in snes snesh sfc sufami satellaview; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"
+							   
+        addEmulator 1 "$md_id" "$system" "$md_inst/snes9x2002_libretro.so"
+        addSystem "$system"
+		cp -r "$scriptdir/configs/all/retrofe/medium_artwork" "$romdir/$system/"
+        cp -r "$scriptdir/configs/all/retrofe/system_artwork" "$romdir/$system/"
+		chown -R $user:$user "$romdir/$system"
+done
 }

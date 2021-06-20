@@ -69,8 +69,10 @@ function install_lr-flycast() {
 }
 
 function configure_lr-flycast() {
-    mkRomDir "dreamcast"
-    ensureSystemretroconfig "dreamcast"
+    local system
+    for system in atomiswave dreamcast naomi; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"
 
     mkUserDir "$biosdir/dc"
 
@@ -84,5 +86,5 @@ function configure_lr-flycast() {
     isPlatform "kms" && def=1
     # segfaults on the rpi without redirecting stdin from </dev/null
     addEmulator $def "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
-    addSystem "dreamcast"
+    addSystem "$system"
 }

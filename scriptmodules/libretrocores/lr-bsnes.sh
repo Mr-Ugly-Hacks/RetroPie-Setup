@@ -49,6 +49,6 @@ function configure_lr-bsnes() {
     mkRomDir "snes"
     ensureSystemretroconfig "snes"
 
-    addEmulator 1 "$md_id" "snes" "$md_inst/bsnes_libretro.so"
+    addEmulator 0 "$md_id" "snes" "$md_inst/bsnes_libretro.so"
     addSystem "snes"
 }

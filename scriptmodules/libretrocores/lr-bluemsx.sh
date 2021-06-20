@@ -36,11 +36,13 @@ function install_lr-bluemsx() {
 }
 
 function configure_lr-bluemsx() {
-    mkRomDir "msx"
-    ensureSystemretroconfig "msx"
-
-    mkRomDir "coleco"
-    ensureSystemretroconfig "coleco"
+    local system
+    for system in msx msx2 msx2plus msxturbo spectravideo coleco; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"
+        addEmulator 1 "$md_id" "$system" "$md_inst/bluemsx_libretro.so"
+        addSystem "$system"
+	done
 
     # force colecovision system
     local core_config="$md_conf_root/coleco/retroarch-core-options.cfg"
@@ -48,13 +50,49 @@ function configure_lr-bluemsx() {
     iniSet "core_options_path" "$core_config"
     iniSet "bluemsx_msxtype" "ColecoVision" "$core_config"
     chown $user:$user "$core_config"
+	
+    # force MSX system
+    local core_config="$md_conf_root/msx/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/msx/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet "bluemsx_msxtype" "MSX" "$core_config"
+	iniSet "bluemsx_vdp_synctype" "60Hz" "$core_config"
+    chown $user:$user "$core_config"
+	
+    # force MSX2 system
+    local core_config="$md_conf_root/msx2/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/msx2/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet "bluemsx_msxtype" "MSX2" "$core_config"
+	iniSet "bluemsx_vdp_synctype" "60Hz" "$core_config"
+    chown $user:$user "$core_config"
+	
+    # force MSX2+ system
+    local core_config="$md_conf_root/msx2plus/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/msx2plus/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet "bluemsx_msxtype" "MSX2+" "$core_config"
+	iniSet "bluemsx_vdp_synctype" "60Hz" "$core_config"
+    chown $user:$user "$core_config"
+	
+    # force MSXturboR system
+    local core_config="$md_conf_root/msxturbo/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/msxturbo/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet "bluemsx_msxtype" "Auto" "$core_config"
+	iniSet "bluemsx_vdp_synctype" "Auto" "$core_config"
+    chown $user:$user "$core_config"
+	
+    # force spectravideo system
+    local core_config="$md_conf_root/spectravideo/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/spectravideo/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet "bluemsx_msxtype" "SVI - Spectravideo SVI-328" "$core_config"
+	iniSet "bluemsx_vdp_synctype" "60Hz" "$core_config"
+    chown $user:$user "$core_config"
+	
 
     cp -rv "$md_inst/"{Databases,Machines} "$biosdir/"
     chown -R $user:$user "$biosdir/"{Databases,Machines}
-
-    addEmulator 1 "$md_id" "msx" "$md_inst/bluemsx_libretro.so"
-    addSystem "msx"
-
-    addEmulator 1 "$md_id" "coleco" "$md_inst/bluemsx_libretro.so"
-    addSystem "coleco"
+			  
 }

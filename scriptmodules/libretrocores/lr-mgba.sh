@@ -39,7 +39,7 @@ function install_lr-mgba() {
 function configure_lr-mgba() {
     local system
     local def
-    for system in gb gbc gba; do
+    for system in gb gbc gba sgb sgb-jp gbh gb-jp gb-unl gbah gba-jp gbc-jp; do
         def=0
         [[ "$system" == "gba" ]] && ! isPlatform "armv6" && def=1
         mkRomDir "$system"

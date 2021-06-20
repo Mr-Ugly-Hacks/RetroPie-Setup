@@ -46,11 +46,13 @@ function install_lr-snes9x2010() {
 }
 
 function configure_lr-snes9x2010() {
-    mkRomDir "snes"
-    ensureSystemretroconfig "snes"
-
-    local def=0
-    isPlatform "armv7" && def=1
-    addEmulator $def "$md_id" "snes" "$md_inst/snes9x2010_libretro.so"
-    addSystem "snes"
+    local system
+    for system in snes snesh sfc sufami satellaview; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"						   
+							   
+        addEmulator 1 "$md_id" "$system" "$md_inst/snes9x2010_libretro.so"
+        addSystem "$system"
+		
+    done
 }

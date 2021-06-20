@@ -40,14 +40,26 @@ function install_lr-fceumm() {
 function configure_lr-fceumm() {
     mkRomDir "nes"
     mkRomDir "fds"
+	mkRomDir "famicom"
+	mkRomDir "nesh"
+	mkRomDir "nes-unl"
     ensureSystemretroconfig "nes"
     ensureSystemretroconfig "fds"
+	ensureSystemretroconfig "nesh"
+    ensureSystemretroconfig "famicom"
+	ensureSystemretroconfig "nes-unl"
 
     local def=1
     isPlatform "armv6" && def=0
 
     addEmulator "$def" "$md_id" "nes" "$md_inst/fceumm_libretro.so"
     addEmulator 0 "$md_id" "fds" "$md_inst/fceumm_libretro.so"
+	addEmulator 0 "$md_id" "famicom" "$md_inst/fceumm_libretro.so"
+	addEmulator 0 "$md_id" "nesh" "$md_inst/fceumm_libretro.so"
+	addEmulator 0 "$md_id" "nes-unl" "$md_inst/fceumm_libretro.so"
     addSystem "nes"
     addSystem "fds"
+	addSystem "nesh"
+	addSystem "famicom"
+	addSystem "nes-unl"
 }

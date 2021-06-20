@@ -34,7 +34,7 @@ function install_lr-vbam() {
 
 function configure_lr-vbam() {
     local system
-    for system in gb gbc gba; do
+    for system in gb gbc gba gb-jp gbh gbc-jp gba-jp gbah; do
         mkRomDir "$system"
         ensureSystemretroconfig "$system"
 

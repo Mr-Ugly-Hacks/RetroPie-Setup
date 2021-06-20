@@ -34,13 +34,28 @@ function install_lr-caprice32() {
 
 function configure_lr-caprice32() {
     mkRomDir "amstradcpc"
+    mkRomDir "amstradgx4000"
     ensureSystemretroconfig "amstradcpc"
+    ensureSystemretroconfig "amstradgx4000"
 
     setRetroArchCoreOption "cap32_autorun" "enabled"
     setRetroArchCoreOption "cap32_Model" "6128"
     setRetroArchCoreOption "cap32_Ram" "128"
     setRetroArchCoreOption "cap32_combokey" "y"
+	
+	# force gx4000 system
+	local core_config="$md_conf_root/amstradgx4000/retroarch-core-options.cfg"
+	iniConfig " = " '"' "$md_conf_root/amstradgx4000/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+	iniSet "cap32_autorun" "enabled" "$core_config"
+    iniSet "cap32_model" "6128+" "$core_config"
+    iniSet "cap32_ram" "128" "$core_config"
+    iniSet "cap32_combokey" "y" "$core_config"
+	chown $user:$user "$core_config"
 
     addEmulator 1 "$md_id" "amstradcpc" "$md_inst/cap32_libretro.so"
     addSystem "amstradcpc"
+    addEmulator 1 "$md_id" "amstradgx4000" "$md_inst/cap32_libretro.so"
+    addSystem "amstradgx4000"
+	
 }

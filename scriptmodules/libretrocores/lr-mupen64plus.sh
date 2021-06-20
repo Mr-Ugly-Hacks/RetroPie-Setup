@@ -86,8 +86,12 @@ function install_lr-mupen64plus() {
 
 function configure_lr-mupen64plus() {
     mkRomDir "n64"
+	mkRomDir "n64-japan"
     ensureSystemretroconfig "n64"
+	ensureSystemretroconfig "n64-japan"
 
     addEmulator 0 "$md_id" "n64" "$md_inst/mupen64plus_libretro.so"
     addSystem "n64"
+	addEmulator 0 "$md_id" "n64-japan" "$md_inst/mupen64plus_libretro.so"
+    addSystem "n64-japan"
 }

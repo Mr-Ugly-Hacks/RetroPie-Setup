@@ -34,17 +34,64 @@ function install_lr-atari800() {
 }
 
 function configure_lr-atari800() {
-    mkRomDir "atari800"
-    mkRomDir "atari5200"
+local system
+    for system in atari800 atari5200 atarixegs; do
+        mkRomDir "$system"
 
-    ensureSystemretroconfig "atari800"
-    ensureSystemretroconfig "atari5200"
+        ensureSystemretroconfig "$system"
+        addEmulator 1 "$md_id" "$system" "$md_inst/atari800_libretro.so"
+        addSystem "$system"
+    done
+	
+# force Atari 800 system
+    local core_config="$md_conf_root/atari800/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/atari800/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet atari800_artifacting "disabled" "$core_config"
+    iniSet atari800_cassboot "disabled" "$core_config"
+    iniSet atari800_internalbasic "disabled" "$core_config"
+    iniSet atari800_keyboard "poll" "$core_config"
+    iniSet atari800_ntscpal "NTSC" "$core_config"
+    iniSet atari800_opt1 "disabled" "$core_config"
+    iniSet atari800_opt2 "disabled" "$core_config"
+    iniSet atari800_resolution "336x240" "$core_config"
+    iniSet atari800_sioaccel "disabled" "$core_config"
+    iniSet atari800_system "400/800 (OS B)" "$core_config"
+    chown $user:$user "$core_config"
+	
+# force Atari XE system
+    local core_config="$md_conf_root/atarixegs/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/atarixegs/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet atari800_artifacting "disabled" "$core_config"
+    iniSet atari800_cassboot "disabled" "$core_config"
+    iniSet atari800_internalbasic "disabled" "$core_config"
+    iniSet atari800_keyboard "poll" "$core_config"
+    iniSet atari800_ntscpal "NTSC" "$core_config"
+    iniSet atari800_opt1 "disabled" "$core_config"
+    iniSet atari800_opt2 "disabled" "$core_config"
+    iniSet atari800_resolution "336x240" "$core_config"
+    iniSet atari800_sioaccel "disabled" "$core_config"
+    iniSet "atari800_system" "130XE (128K)" "$core_config"
+    chown $user:$user "$core_config"
+	
+# force Atari 5200 system
+    local core_config="$md_conf_root/atari5200/retroarch-core-options.cfg"
+    iniConfig " = " '"' "$md_conf_root/atari5200/retroarch.cfg"
+    iniSet "core_options_path" "$core_config"
+    iniSet atari800_artifacting "enabled" "$core_config"
+    iniSet atari800_cassboot "disabled" "$core_config"
+    iniSet atari800_internalbasic "disabled" "$core_config"
+    iniSet atari800_keyboard "poll" "$core_config"
+    iniSet atari800_ntscpal "NTSC" "$core_config"
+    iniSet atari800_opt1 "disabled" "$core_config"
+    iniSet atari800_opt2 "disabled" "$core_config"
+    iniSet atari800_resolution "336x240" "$core_config"
+    iniSet atari800_sioaccel "enabled" "$core_config"
+    iniSet atari800_system "5200" "$core_config"
+    chown $user:$user "$core_config"
 
     mkUserDir "$md_conf_root/atari800"
     moveConfigFile "$home/.lr-atari800.cfg" "$md_conf_root/atari800/lr-atari800.cfg"
 
-    addEmulator 1 "lr-atari800" "atari800" "$md_inst/atari800_libretro.so"
-    addEmulator 1 "lr-atari800" "atari5200" "$md_inst/atari800_libretro.so"
-    addSystem "atari800"
-    addSystem "atari5200"
 }

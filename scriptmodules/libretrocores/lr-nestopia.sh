@@ -39,11 +39,24 @@ function install_lr-nestopia() {
 function configure_lr-nestopia() {
     mkRomDir "nes"
     mkRomDir "fds"
+	mkRomDir "famicom"
+	mkRomDir "nesh"
+	mkRomDir "nes-unl"
     ensureSystemretroconfig "nes"
     ensureSystemretroconfig "fds"
+    ensureSystemretroconfig "famicom"
+	ensureSystemretroconfig "nesh"
+	ensureSystemretroconfig "nes-unl"
 
     addEmulator 0 "$md_id" "nes" "$md_inst/nestopia_libretro.so"
+	addEmulator 0 "$md_id" "nesh" "$md_inst/nestopia_libretro.so"
+	addEmulator 0 "$md_id" "nes-unl" "$md_inst/nestopia_libretro.so"
     addEmulator 1 "$md_id" "fds" "$md_inst/nestopia_libretro.so"
+	addEmulator 1 "$md_id" "famicom" "$md_inst/nestopia_libretro.so"
+	
     addSystem "nes"
+	addSystem "nesh"
+	addSystem "nes-unl"
     addSystem "fds"
+	addSystem "famicom"
 }

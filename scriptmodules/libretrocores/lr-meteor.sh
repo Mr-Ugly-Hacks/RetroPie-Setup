@@ -36,8 +36,16 @@ function install_lr-meteor() {
 
 function configure_lr-meteor() {
     mkRomDir "gba"
+	mkRomDir "gbah"
+	mkRomDir "gba-jp"
     ensureSystemretroconfig "gba"
+	ensureSystemretroconfig "gbah"
+	ensureSystemretroconfig "gba-jp"
 
     addEmulator 0 "$md_id" "gba" "$md_inst/meteor_libretro.so"
+	addEmulator 0 "$md_id" "gbah" "$md_inst/meteor_libretro.so"
+	addEmulator 0 "$md_id" "gba-jp" "$md_inst/meteor_libretro.so"
     addSystem "gba"
+	addSystem "gbah"
+	addSystem "gba-jp"
 }

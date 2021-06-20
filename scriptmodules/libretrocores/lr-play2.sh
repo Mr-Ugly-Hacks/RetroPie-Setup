@@ -14,7 +14,7 @@ rp_module_desc="Play! libretro emulator play 2"
 rp_module_help="ROM Extensions: .iso\n\nCopy your playstation 2 roms to $romdir/ps2"
 rp_module_licence="BSD https://github.com/jpd002/Play-/blob/master/License.txt"
 rp_module_section="exp"
-rp_module_flags="!arm !odroid-n2"
+rp_module_flags="!arm"
 
 function depends_play2() {
     getDepends cmake  libsqlite3-dev libcurl4-openssl-dev libgl1-mesa-dev libglu1-mesa-dev libalut-dev libevdev-dev libgles2-mesa-dev
@@ -29,7 +29,7 @@ function sources_lr-play2() {
 }
 
 function build_lr-play2() {
-    if isPlatform "jetson-nano"; then
+    if isPlatform "x86"; then
 		cmake . -DBUILD_PLAY=OFF -DUSE_GLES=OFF -DBUILD_LIBRETRO_CORE=ON
 	else
 		cmake . -DBUILD_PLAY=OFF -DUSE_GLES=ON -DBUILD_LIBRETRO_CORE=ON

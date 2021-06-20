@@ -61,6 +61,8 @@ function install_lr-parallel-n64() {
 function configure_lr-parallel-n64() {
     mkRomDir "n64"
     ensureSystemretroconfig "n64"
+	mkRomDir "n64-japan"
+    ensureSystemretroconfig "n64-japan"
 
     # Set core options
     setRetroArchCoreOption "parallel-n64-gfxplugin" "auto"
@@ -174,4 +176,7 @@ _EOF_
 
     addEmulator 0 "$md_id" "n64" "$md_inst/parallel_n64_libretro.so"
     addSystem "n64"
+	addEmulator 0 "$md_id" "n64-japan" "$md_inst/parallel_n64_libretro.so"
+    addSystem "n64-japan"
+	
 }

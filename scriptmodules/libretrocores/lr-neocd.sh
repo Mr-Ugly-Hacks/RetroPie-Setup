@@ -35,9 +35,9 @@ function install_lr-neocd() {
 }
 
 function configure_lr-neocd() {
-    mkRomDir "neogeo"
-    ensureSystemretroconfig "neogeo"
+    mkRomDir "neocdz"
+    ensureSystemretroconfig "neocdz"
 
-    addEmulator 0 "$md_id" "neogeo" "$md_inst/neocd_libretro.so"
-    addSystem "neogeo"
+    addEmulator 1 "$md_id" "neocdz" "$md_inst/neocd_libretro.so"
+    addSystem "neocdz"
 }

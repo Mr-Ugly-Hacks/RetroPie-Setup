@@ -37,8 +37,9 @@ function install_lr-mesen() {
 
 function configure_lr-mesen() {
     local system
-    for system in "nes" "fds"; do
+    for system in "nes" "fds" "famicom" "dendy" "nesh" "nes-unl"; do
         mkRomDir "$system"
+		mkUserDir "$biosdir/HdPacks"
         ensureSystemretroconfig "$system"
         addEmulator 0 "$md_id" "$system" "$md_inst/mesen_libretro.so"
         addSystem "$system"

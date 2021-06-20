@@ -78,6 +78,8 @@ function install_lr-mupen64plus-next() {
 function configure_lr-mupen64plus-next() {
     mkRomDir "n64"
     ensureSystemretroconfig "n64"
+	mkRomDir "n64-japan"
+    ensureSystemretroconfig "n64-japan"
 
     if isPlatform "rpi"; then
         # Disable hybrid upscaling filter (needs better GPU)
@@ -91,4 +93,6 @@ function configure_lr-mupen64plus-next() {
 
     addEmulator 1 "$md_id" "n64" "$md_inst/mupen64plus_next_libretro.so"
     addSystem "n64"
+	addEmulator 1 "$md_id" "n64-japan" "$md_inst/mupen64plus_next_libretro.so"
+    addSystem "n64-japan"
 }

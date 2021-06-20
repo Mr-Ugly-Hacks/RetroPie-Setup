@@ -47,7 +47,7 @@ function install_lr-fbalpha2012() {
 
 function configure_lr-fbalpha2012() {
     local system
-    for system in arcade fba neogeo; do
+    for system in arcade fba neogeo cps1 cps2 cps3; do
         mkRomDir "$system"
         ensureSystemretroconfig "$system"
         addEmulator 0 "$md_id" "$system" "$md_inst/fbalpha2012_libretro.so"

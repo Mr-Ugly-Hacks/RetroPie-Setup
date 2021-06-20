@@ -49,62 +49,16 @@ function install_lr-fbneo() {
 }
 
 function configure_lr-fbneo() {
-    local def=1
-    isPlatform "armv6" && def=0
-    addEmulator 0 "$md_id" "arcade" "$md_inst/fbneo_libretro.so"
-    addEmulator 0 "$md_id-neocd" "arcade" "$md_inst/fbneo_libretro.so --subsystem neocd"
-    addEmulator $def "$md_id" "neogeo" "$md_inst/fbneo_libretro.so"
-    addEmulator 0 "$md_id-neocd" "neogeo" "$md_inst/fbneo_libretro.so --subsystem neocd"
-    addEmulator $def "$md_id" "fba" "$md_inst/fbneo_libretro.so"
-    addEmulator 0 "$md_id-neocd" "fba" "$md_inst/fbneo_libretro.so --subsystem neocd"
-
-    addEmulator 0 "$md_id-pce" "pcengine" "$md_inst/fbneo_libretro.so --subsystem pce"
-    addEmulator 0 "$md_id-sgx" "pcengine" "$md_inst/fbneo_libretro.so --subsystem sgx"
-    addEmulator 0 "$md_id-tg" "pcengine" "$md_inst/fbneo_libretro.so --subsystem tg"
-    addEmulator 0 "$md_id-gg" "gamegear" "$md_inst/fbneo_libretro.so --subsystem gg"
-    addEmulator 0 "$md_id-sms" "mastersystem" "$md_inst/fbneo_libretro.so --subsystem sms"
-    addEmulator 0 "$md_id-md" "megadrive" "$md_inst/fbneo_libretro.so --subsystem md"
-    addEmulator 0 "$md_id-sg1k" "sg-1000" "$md_inst/fbneo_libretro.so --subsystem sg1k"
-    addEmulator 0 "$md_id-cv" "coleco" "$md_inst/fbneo_libretro.so --subsystem cv"
-    addEmulator 0 "$md_id-msx" "msx" "$md_inst/fbneo_libretro.so --subsystem msx"
-    addEmulator 0 "$md_id-spec" "zxspectrum" "$md_inst/fbneo_libretro.so --subsystem spec"
-    addEmulator 0 "$md_id-fds" "fds" "$md_inst/fbneo_libretro.so --subsystem fds"
-    addEmulator 0 "$md_id-nes" "nes" "$md_inst/fbneo_libretro.so --subsystem nes"
-    addEmulator 0 "$md_id-ngp" "ngp" "$md_inst/fbneo_libretro.so --subsystem ngp"
-    addEmulator 0 "$md_id-ngpc" "ngpc" "$md_inst/fbneo_libretro.so --subsystem ngp"
-    addEmulator 0 "$md_id-chf" "channelf" "$md_inst/fbneo_libretro.so --subsystem chf"
-
-    addSystem "arcade"
-    addSystem "neogeo"
-    addSystem "fba"
-
-    addSystem "pcengine"
-    addSystem "gamegear"
-    addSystem "mastersystem"
-    addSystem "megadrive"
-    addSystem "sg-1000"
-    addSystem "coleco"
-    addSystem "msx"
-    addSystem "zxspectrum"
-    addSystem "fds"
-    addSystem "nes"
-    addSystem "ngp"
-    addSystem "ngpc"
-    addSystem "channelf"
-
-    [[ "$md_mode" == "remove" ]] && return
-
-    local dir
-    for dir in arcade fba neogeo; do
-        mkRomDir "$dir"
-        ensureSystemretroconfig "$dir"
+    local system
+    for system in arcade neogeo neocdz fbneo pcengine supergrafx tg16 gamegear mastersystem megadrive sg-1000 coleco msx zxspectrum cps1 cps2 cps3 nes fds; do
+        mkRomDir "$system"
+        ensureSystemretroconfig "$system"
+		addSystem "$system"
+	
     done
 
-    # Create directories for all support files
+    # Create samples directory
     mkUserDir "$biosdir/fbneo"
-    mkUserDir "$biosdir/fbneo/blend"
-    mkUserDir "$biosdir/fbneo/cheats"
-    mkUserDir "$biosdir/fbneo/patched"
     mkUserDir "$biosdir/fbneo/samples"
 
     # copy hiscore.dat
@@ -113,4 +67,34 @@ function configure_lr-fbneo() {
 
     # Set core options
     setRetroArchCoreOption "fbneo-diagnostic-input" "Hold Start"
+
+    local def=1
+    isPlatform "armv6" && def=0
+   
+    addEmulator 0 "$md_id" "arcade" "$md_inst/fbneo_libretro.so"
+    addEmulator 0 "$md_id-neocd" "arcade" "$md_inst/fbneo_libretro.so --subsystem neocd"
+    addEmulator 1 "$md_id" "neogeo" "$md_inst/fbneo_libretro.so"
+    addEmulator 0 "$md_id-neocd" "neogeo" "$md_inst/fbneo_libretro.so --subsystem neocd"
+    addEmulator 0 "$md_id-neocd" "neocdz" "$md_inst/fbneo_libretro.so --subsystem neocd"
+    addEmulator 1 "$md_id" "fba" "$md_inst/fbneo_libretro.so"
+    addEmulator 0 "$md_id-neocd" "fba" "$md_inst/fbneo_libretro.so --subsystem neocd"
+
+    addEmulator 0 "$md_id-pce" "pcengine" "$md_inst/fbneo_libretro.so --subsystem pce"
+    addEmulator 0 "$md_id-sgx" "supergrafx" "$md_inst/fbneo_libretro.so --subsystem sgx"
+    addEmulator 0 "$md_id-tg" "tg16" "$md_inst/fbneo_libretro.so --subsystem tg"
+    addEmulator 0 "$md_id-gg" "gamegear" "$md_inst/fbneo_libretro.so --subsystem gg"
+    addEmulator 0 "$md_id-sms" "mastersystem" "$md_inst/fbneo_libretro.so --subsystem sms"
+    addEmulator 0 "$md_id-md" "megadrive" "$md_inst/fbneo_libretro.so --subsystem md"
+    addEmulator 0 "$md_id-sg1k" "sg-1000" "$md_inst/fbneo_libretro.so --subsystem sg1k"
+    addEmulator 0 "$md_id-cv" "coleco" "$md_inst/fbneo_libretro.so --subsystem cv"
+    addEmulator 0 "$md_id-msx" "msx" "$md_inst/fbneo_libretro.so --subsystem msx"
+    addEmulator 0 "$md_id-spec" "zxspectrum" "$md_inst/fbneo_libretro.so --subsystem spec"
+	addEmulator 0 "$md_id-fds" "fds" "$md_inst/fbneo_libretro.so --subsystem fds"
+    addEmulator 0 "$md_id-nes" "nes" "$md_inst/fbneo_libretro.so --subsystem nes"
+	addEmulator 1 "$md_id-nes" "cps1" "$md_inst/fbneo_libretro.so"
+	addEmulator 1 "$md_id-nes" "cps2" "$md_inst/fbneo_libretro.so"
+	addEmulator 1 "$md_id-nes" "cps3" "$md_inst/fbneo_libretro.so"
+addEmulator 0 "$md_id-ngp" "ngp" "$md_inst/fbneo_libretro.so --subsystem ngp"
+    addEmulator 0 "$md_id-ngpc" "ngpc" "$md_inst/fbneo_libretro.so --subsystem ngp"
+											
 }

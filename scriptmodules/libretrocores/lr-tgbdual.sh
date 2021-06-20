@@ -35,14 +35,30 @@ function install_lr-tgbdual() {
 function configure_lr-tgbdual() {
     mkRomDir "gbc"
     mkRomDir "gb"
+	mkRomDir "gbh"
+    mkRomDir "gb-jp"
+	mkRomDir "gbc-jp"
+    mkRomDir "gb-unl"
     ensureSystemretroconfig "gb"
     ensureSystemretroconfig "gbc"
+	ensureSystemretroconfig "gbh"
+    ensureSystemretroconfig "gbc-jp"
+	ensureSystemretroconfig "gb-jp"
+    ensureSystemretroconfig "gb-unl"
 
     # enable dual / link by default
     setRetroArchCoreOption "tgbdual_gblink_enable" "enabled"
 
     addEmulator 0 "$md_id" "gb" "$md_inst/tgbdual_libretro.so"
     addEmulator 0 "$md_id" "gbc" "$md_inst/tgbdual_libretro.so"
+	addEmulator 0 "$md_id" "gb-jp" "$md_inst/tgbdual_libretro.so"
+    addEmulator 0 "$md_id" "gbc-jp" "$md_inst/tgbdual_libretro.so"
+	addEmulator 0 "$md_id" "gbh" "$md_inst/tgbdual_libretro.so"
+    addEmulator 0 "$md_id" "gb-unl" "$md_inst/tgbdual_libretro.so"
     addSystem "gb"
     addSystem "gbc"
+	addSystem "gb-jp"
+    addSystem "gbc-jp"
+	addSystem "gbh"
+    addSystem "gb-unl"
 }
