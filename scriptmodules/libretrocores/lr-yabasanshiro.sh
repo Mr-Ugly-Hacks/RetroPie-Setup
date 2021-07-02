@@ -24,17 +24,8 @@ function sources_lr-yabasanshiro() {
 }
 
 function build_lr-yabasanshiro() {
-    if isPlatform "odroid-n2"; then
-        make -j5 -C yabause/src/libretro/ platform=odroid-n2
-	elif isPlatform "jetson-nano"; then
-        make -j2 -C yabause/src/libretro/ platform=arm64
-    elif isPlatform "odroid-xu"; then
-        make  -C yabause/src/libretro/ platform=odroid BOARD="ODROID-XU3"
-    elif isPlatform "rockpro64"; then       
-        make -j5 -C yabause/src/libretro/ platform=rockpro64
-    else
-        exit
-    fi
+    make -j5 -C yabause/src/libretro/ 
+	
     md_ret_require="$md_build/yabause/src/libretro/yabasanshiro_libretro.so"
 }
 
