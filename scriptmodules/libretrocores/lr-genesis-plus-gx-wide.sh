@@ -28,7 +28,7 @@ function build_lr-genesis-plus-gx-wide() {
 
 function install_lr-genesis-plus-gx-wide() {
     md_ret_files=(
-        'genesis_plus_gx_libretro.so'
+        'genesis_plus_gx_wide_libretro.so'
         'HISTORY.txt'
         'LICENSE.txt'
         'README.md'
