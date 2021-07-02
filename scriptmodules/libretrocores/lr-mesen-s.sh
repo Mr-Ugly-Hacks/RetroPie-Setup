@@ -24,16 +24,16 @@ function build_lr-mesen-s() {
     local params=()
     isPlatform "arm" && params+=(platform="armv")
 
-    cd libretro
+    cd Libretro
     make "${params[@]}" clean
     make "${params[@]}"
-    md_ret_require="$md_build/libretro/mesen-s_libretro.so"
+    md_ret_require="$md_build/Libretro/mesen-s_libretro.so"
 }
 
 function install_lr-mesen-s() {
     md_ret_files=(
-        'libretro/mesen-s_libretro.so'
-        'docs'
+        'Libretro/mesen-s_libretro.so'
+        
     )
 }
 
