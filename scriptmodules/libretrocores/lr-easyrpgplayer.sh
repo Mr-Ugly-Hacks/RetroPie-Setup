@@ -14,15 +14,17 @@ rp_module_desc="RPG Maker 2000/2003 engine - EasyRPG Player interpreter port for
 rp_module_help="ROM Extension: .ldb\n\nYou need to unzip your RPG Maker games into subdirectories in $romdir/ports/easyrpg/games\n\nRTP file:\nExtract the RTP files from their respective .exe installers and then copy RTP 2000 files in $biosdir/rtp/2000 and RTP 2003 files in $biosdir/rtp/2003."
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/easyrpg-libretro/master/COPYING"
 rp_module_section="exp"
-rp_module_flags="!all"
+rp_module_flags=""
 
 function depends_lr-easyrpgplayer() {
     depends_easyrpg-player
 }
 
 function sources_lr-easyrpgplayer() {
-    gitPullOrClone "$md_build" https://github.com/libretro/easyrpg-libretro.git
+    gitPullOrClone "$md_build" https://github.com/EasyRPG/Player.git
     gitPullOrClone "liblcf" https://github.com/EasyRPG/liblcf.git
+	git submodule init
+	git submodule update
 }
 
 function build_lr-easyrpgplayer() {
@@ -33,15 +35,14 @@ function build_lr-easyrpgplayer() {
     sudo make install
     cd ..
 
-    cd "builds/libretro"
-    make -f Makefile.libretro clean
-    make -f Makefile.libretro 
-    md_ret_require="$md_build/builds/libretro/easyrpg_libretro.so"
+    cmake . -DPLAYER_TARGET_PLATFORM=libretro -DBUILD_SHARED_LIBS=ON
+	make
+    md_ret_require="$md_build/easyrpg_libretro.so"
 }
 
 function install_lr-easyrpgplayer() {
     md_ret_files=(
-        'builds/libretro/easyrpg_libretro.so'
+        'easyrpg_libretro.so'
     )
 }
 
