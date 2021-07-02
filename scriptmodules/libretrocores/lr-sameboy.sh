@@ -29,9 +29,6 @@ function build_lr-sameboy() {
 
 function install_lr-sameboy() {
     md_ret_files=(
-        'COPYING'
-        'changelog'
-        'README.md'
         '/libretro/sameboy_libretro.so'
     )
 }
