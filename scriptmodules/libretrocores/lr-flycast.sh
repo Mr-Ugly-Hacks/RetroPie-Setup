@@ -56,6 +56,7 @@ function build_lr-flycast() {
     isPlatform "aarch64" && params+=("WITH_DYNAREC=arm64" "HOST_CPU_FLAGS=-DTARGET_LINUX_ARMv8")
     isPlatform "arm" && params+=("WITH_DYNAREC=arm")
     ! isPlatform "x86" && params+=("HAVE_GENERIC_JIT=0" "HAVE_VULKAN=0")
+	isPlatform "x86" && params+=("HAVE_OIT=1")
     make "${params[@]}" clean
     CFLAGS+=" ${add_flags[@]}" make "${params[@]}"
     md_ret_require="$md_build/flycast_libretro.so"
