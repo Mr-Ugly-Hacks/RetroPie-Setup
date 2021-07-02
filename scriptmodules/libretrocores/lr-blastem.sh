@@ -13,7 +13,7 @@ rp_module_id="lr-blastem"
 rp_module_desc="Sega 16 bit emu - blastem port for libretro"
 rp_module_help="ROM Extensions: .bin .cue .gen .gg .iso .md .sg .smd .sms .zip\nCopy your Game Gear roms to $romdir/gamegear\nMasterSystem roms to $romdir/mastersystem\nMegadrive / Genesis roms to $romdir/megadrive\nSG-1000 roms to $romdir/sg-1000\nSegaCD roms to $romdir/segacd\nThe Sega CD requires the BIOS files bios_CD_U.bin and bios_CD_E.bin and bios_CD_J.bin copied to $biosdir"
 rp_module_licence="https://github.com/libretro/blastem/blob/libretro/COPYING"
-rp_module_repo="git https://github.com/libretro/blastem.git master"
+rp_module_repo="git https://github.com/libretro/blastem.git libretro"
 rp_module_section="exp"
 
 function sources_lr-blastem() {
