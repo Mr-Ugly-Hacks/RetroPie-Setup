@@ -27,12 +27,12 @@ function build_lr-fbalpha2012-cps3() {
     local params=()
     isPlatform "arm" && params+=("platform=armv")
     make -f makefile.libretro "${params[@]}"
-    md_ret_require="$md_build/svn-current/trunk/fbalpha2012_cps3_libretro.so"
+    md_ret_require="$md_build/svn-current/trunk/fbalpha2012_libretro.so"
 }
 
 function install_lr-fbalpha2012-cps3() {
     md_ret_files=(
-        'svn-current/trunk/fbalpha2012_cps3_libretro.so'
+        'svn-current/trunk/fbalpha2012_libretro.so'
         
     )
 }
@@ -42,7 +42,7 @@ function configure_lr-fbalpha2012-cps3() {
     for system in cps3; do
         mkRomDir "$system"
         ensureSystemretroconfig "$system"
-        addEmulator 0 "$md_id" "$system" "$md_inst/fbalpha2012_cps3_libretro.so"
+        addEmulator 0 "$md_id" "$system" "$md_inst/fbalpha2012_libretro.so"
         addSystem "$system"
     done
 }

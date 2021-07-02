@@ -13,7 +13,7 @@ rp_module_id="lr-fbalpha2012-cps2"
 rp_module_desc="Arcade emu - Final Burn Alpha (0.2.97.30) cps1 port for libretro"
 rp_module_help="Previously called lr-fba\n\nROM Extension: .zip\n\nCopy your CPS1 roms to\n$romdir/cps1 ."
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/fbalpha2012-cps1/master/docs/license.txt"
-rp_module_repo="git https://github.com/libretro/fbalpha2012_cps1.git master"
+rp_module_repo="git https://github.com/libretro/fbalpha2012_cps2.git master"
 rp_module_section="opt armv6=main"
 
 
