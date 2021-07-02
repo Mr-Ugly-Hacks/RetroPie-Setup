@@ -29,7 +29,7 @@ function build_lr-frodo() {
 
 function install_lr-frodo() {
     md_ret_files=(
-        'lr-frodo'
+        'frodo_libretro.so'
     )
 }
 
