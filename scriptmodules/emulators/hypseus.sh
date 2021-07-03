@@ -14,8 +14,8 @@
 rp_module_id="hypseus"
 rp_module_desc="Hypseus a modern Daphne - Laserdisc Emulator fork"
 rp_module_help="ROM Extension: .daphne\n\nCopy your Daphne roms to $romdir/hypseus"
-rp_module_licence="GPL3 https://github.com/mcspaeth/hypseus/blob/master/LICENSE"
-rp_module_repo="https://github.com/sikotik/hypseus.git"
+rp_module_licence="GPL3 https://raw.githubusercontent.com/DirtBagXon/hypseus-singe/master/LICENSE
+rp_module_repo="https://github.com/DirtBagXon/hypseus-singe.git master"
 rp_module_section="exp"
 rp_module_flags=""
 
@@ -33,16 +33,17 @@ function build_hypseus() {
     cd build
     cmake ../src
     make
+	md_ret_require="$md_build/build/hypseus"
 }
 
 function install_hypseus() {
     md_ret_files=(
         "pics"
-		"/build/sound"
+		"sound"
 	    "/build/hypseus"   
         "/README.md"
 		"fonts"
-        "/build/testvldp"
+        
     )
 }
 
@@ -69,7 +70,7 @@ if [[ -f "\$dir/\$name.commands" ]]; then
     params=\$(<"\$dir/\$name.commands")
 fi
 
-"$md_inst/hypseus" "\$name" vldp -framefile "\$dir/\$name.txt" -homedir "$md_inst" -fullscreen -x 1920 -y 1080 -useoverlaysb 2   \$params
+"$md_inst/hypseus" "\$name" vldp -framefile "\$dir/\$name.txt" -homedir "$md_inst" -fullscreen -useoverlaysb 2   \$params
 _EOF_
     chmod +x "$md_inst/hypseus.sh"
 	
