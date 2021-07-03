@@ -27,7 +27,7 @@ function sources_devilutionx() {
 
 function build_devilutionx() {
     cd build
-    cmake .. -DVERSION_NUM=1.0.0 -DVERSION_SUFFIX=FFFFFFF -DCMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$md_inst"
+    cmake -DVERSION_NUM=1.0.0 -DVERSION_SUFFIX=FFFFFFF -DCMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$md_inst" ..
     make -j3
 	md_ret_require="$md_build/build/devilutionx"
 }
