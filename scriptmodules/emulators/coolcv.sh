@@ -13,7 +13,7 @@ rp_module_id="coolcv"
 rp_module_desc="CoolCV Colecovision Emulator"
 rp_module_help="ROM Extensions: .bin .col .rom .zip\n\nCopy your Colecovision roms to $romdir/coleco"
 rp_module_licence="PROP"
-rp_module_repo="file https://atariage.com/forums/applications/core/interface/file/attachment.php?id=545781"
+rp_module_repo="file https://github.com/Mr-Ugly-Hacks/archive/blob/main/coolcv.tar.gz"
 rp_module_section="opt"
 rp_module_flags="!mali"
 
@@ -31,6 +31,6 @@ function configure_coolcv() {
 
     moveConfigFile "$home/coolcv_mapping.txt" "$md_conf_root/coleco/coolcv_mapping.txt"
 
-    addEmulator 1 "$md_id" "coleco" "$md_inst/coolcv_pi %ROM%"
+    addEmulator 1 "$md_id" "coleco" "$md_inst/coolcv_x86_64 %ROM%"
     addSystem "coleco"
 }
