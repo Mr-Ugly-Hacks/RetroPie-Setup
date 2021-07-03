@@ -16,7 +16,7 @@ rp_module_repo="git https://github.com/libretro/gong.git"
 rp_module_section="exp"
 rp_module_flags=""
 
-function sources_lr-2048() {
+function sources_lr-gong() {
     gitPullOrClone 
 }
 
