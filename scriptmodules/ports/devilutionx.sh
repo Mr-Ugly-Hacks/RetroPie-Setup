@@ -12,22 +12,24 @@
 rp_module_id="devilutionx"
 rp_module_desc="devilutionx - Diablo Engine"
 rp_module_licence="https://raw.githubusercontent.com/diasurgical/devilutionX/master/LICENSE"
+rp_module_repo="git https://github.com/diasurgical/devilutionX"
 rp_module_help="Copy your original diabdat.mpq file from Diablo to $romdir/ports/devilutionx."
 rp_module_section="exp"
-rp_module_flags="!x86 !mali"
+rp_module_flags="!mali"
 
 function depends_devilutionx() {
     getDepends cmake g++ libsdl2-mixer-dev libsdl2-ttf-dev libsodium-dev
 }
 
 function sources_devilutionx() {
-    gitPullOrClone "$md_build" https://github.com/diasurgical/devilutionX
+    gitPullOrClone
 }
 
 function build_devilutionx() {
     cd build
-    cmake -DBINARY_RELEASE=ON CMAKE_INSTALL_PREFIX="$md_inst" ..
+    cmake -DCMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$md_inst" ..
     make -j3
+	md_ret_require="$md_build/build/devilutionx"
 }
 
 function install_devilutionx() {
