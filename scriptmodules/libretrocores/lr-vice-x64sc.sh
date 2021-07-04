@@ -42,7 +42,7 @@ function configure_lr-vice-x64sc() {
     cp -R "$md_inst/data" "$biosdir"
     chown -R $user:$user "$biosdir/data"
 
-    addEmulator 1 "$md_id" "c64sc" "$md_inst/vice_x64sc_libretro.so"
-    addSystem "c64sc"
+    addEmulator 0 "$md_id" "c64" "$md_inst/vice_x64sc_libretro.so"
+    addSystem "c64"
 	
 }
