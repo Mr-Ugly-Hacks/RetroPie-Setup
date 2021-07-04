@@ -1,54 +1,44 @@
 #!/usr/bin/env bash
 
-# This file is part of ARES by The RetroArena
+# This file is part of The RetroPie Project
 #
-# ARES is the legal property of its developers, whose names are
+# The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/Retro-Arena/RetroArena-Setup/master/LICENSE.md
-#
-# Core script functionality is based upon The RetroPie Project https://retropie.org.uk Script Modules
+# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="openbor"
 rp_module_desc="OpenBOR (v6510) - Beat 'em Up Game Engine"
 rp_module_help="Place your pak files in $romdir/openbor and launch from ES.\n\nUse a keyboard to initially configure a gamepad."
-rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
-rp_module_section="sa"
-rp_module_flags=""
+rp_module_licence="BSD https://raw.githubusercontent.com/rofl0r/openbor/master/LICENSE"
+rp_module_repo="git https://github.com/rofl0r/openbor.git master"
+rp_module_section="opt"
+rp_module_flags="!arm"
 
 function depends_openbor() {
     getDepends libsdl2-gfx-dev libvorbisidec-dev libvpx-dev libogg-dev libsdl2-gfx-1.0-0 libvorbisidec1
 	
-	if isPlatform "odroid-n2"; then
-	/home/aresuser/ARES-Setup/fixmali.sh
-    elif isPlatform "rockpro64"; then
-    /usr/lib/arm-linux-gnueabihf/install_mali.sh
-	fi
-}
+	}
 
 function sources_openbor() {
-    gitPullOrClone "$md_build" https://github.com/crcerror/OpenBOR-Raspberry.git
+    gitPullOrClone
 }
 
 function build_openbor() {
-    local params=()
-    params=BUILD_PANDORA=1
-    isPlatform "jetson-nano" && sed -i -e 's:-marm -mfloat-abi=hard ::g' "$md_build/patch/latest_build.diff"
-    isPlatform "odroid-n2" && sed -i -e 's:-marm -mfloat-abi=hard ::g' "$md_build/patch/latest_build.diff"
-    isPlatform "rockpro64" && sed -i -e 's:-marm -mfloat-abi=hard ::g' "$md_build/patch/latest_build.diff"
-    patch -p0 -i ./patch/latest_build.diff
-    make "${params[@]}"
-    md_ret_require="$md_build/OpenBOR"
-    wget -q --show-progress "http://raw.githubusercontent.com/crcerror/OpenBOR-63xx-RetroPie-openbeta/master/libGL-binary/libGL-for-RPi-4/libGL.so.1"
-    
+    make clean
+	make
+    cd "$md_build/tools/borpak/"
+    ./build-linux.sh
+      
 }
 
 function install_openbor() {
     md_ret_files=(
        'OpenBOR'
-       'libGL.so.1'
+       'tools/borpak/borpak'
+       'tools/unpack.sh'
     )
 }
 
