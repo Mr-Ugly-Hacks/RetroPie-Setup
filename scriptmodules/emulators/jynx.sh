@@ -11,7 +11,7 @@
 
 rp_module_id="jynx"
 rp_module_desc="Camputers Lynx 48/96 emulator"
-rp_module_help="ROM Extensions: .tap \n\nCopy your pc88 games to to $romdir/camplynx\n\nCopy bios files lynx48-1.rom lynx48-2.rom lynx96-1.rom lynx96-2.rom lynx96-3.rom lynx96-3-scorpion.rom to $biosdir/camplynx"
+rp_module_help="ROM Extensions: .tap \n\nCopy your lynx 48/96 games to to $romdir/camplynx\n\nCopy bios files lynx48-1.rom lynx48-2.rom lynx96-1.rom lynx96-2.rom lynx96-3.rom lynx96-3-scorpion.rom to $biosdir/camplynx"
 rp_module_repo="git https://github.com/jonathan-markland/Jynx.git master"
 rp_module_section="exp"
 rp_module_flags="!arm"
