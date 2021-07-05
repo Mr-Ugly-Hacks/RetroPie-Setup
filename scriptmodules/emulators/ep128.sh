@@ -11,7 +11,7 @@
 
 rp_module_id="ep128emu"
 rp_module_desc="Enterprise 128  Emulator for Linux"
-rp_module_help="ROM Extensions:.img .tap .rom .bin \n\nCopy your Enterprise 128 games to to $romdir/ep128\n"
+rp_module_help="ROM Extensions:.img .tap .rom .bin .bas .dtf .com .prg\n\nCopy your Enterprise 128 games to to $romdir/ep128\n"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/istvan-v/ep128emu/master/COPYING"
 rp_module_repo="git https://github.com/istvan-v/ep128emu.git master"
 rp_module_section="exp"
