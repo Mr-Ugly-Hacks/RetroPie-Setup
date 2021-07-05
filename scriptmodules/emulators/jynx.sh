@@ -33,7 +33,7 @@ function build_jynx() {
 
 function install_jynx() {
     md_ret_files=(
-        '/build/ForLinux/bin/Release/Jynx'
+        'ForLinux/bin/Release/Jynx'
     )
 }
 
