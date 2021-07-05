@@ -17,7 +17,7 @@ rp_module_section="exp"
 rp_module_flags="!arm"
 
 function depends_b-em() {
-    getDepends liballegro5.2-dev  zlib1g-dev
+    getDepends liballegro5-dev  zlib1g-dev
 }
 
 function sources_b-em() {
