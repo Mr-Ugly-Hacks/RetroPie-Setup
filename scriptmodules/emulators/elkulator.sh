@@ -45,7 +45,7 @@ function install_elkulator() {
 }
 
 function configure_elkulator() {
-    mkRomDir "elkulator"
+    mkRomDir "electron"
     mkUserDir "$md_conf_root/elkulator"
 	mkUserDir "$biosdir/electron"
 	ln -sf "$biosdir/electron" "$md_inst/roms"
