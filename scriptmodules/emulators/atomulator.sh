@@ -47,12 +47,15 @@ function configure_atomulator() {
 	
     cat > "$romdir/atom/atomulator.sh" << _EOF_
     #!/usr/bin/env bash
-    "$md_inst/Atomulator"
+	pushd "$md_inst"
+    ./Atomulator
+	popd
 _EOF_
 	
 chmod a+x 	"$romdir/atom/atomulator.sh" 
 	addEmulator 1 "${md_id}"  "atom" "$romdir/atom/atomulator.sh" 
     
     addSystem "atom"
+	chown -R $user:$user "$md_inst" 
 	
 }
