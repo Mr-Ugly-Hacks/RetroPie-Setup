@@ -38,9 +38,9 @@ function install_jynx() {
 }
 
 function configure_jynx() {
-    mkRomDir "jynx"
-    mkUserDir "$md_conf_root/jynx"
-	mkUserDir "$biosdir/jynx"
+    mkRomDir "camplynx"
+    mkUserDir "$md_conf_root/camplynx"
+	mkUserDir "$biosdir/camplynx"
 	ln -sf "$biosdir/camplynx/lynx48-1.rom" "$md_inst/lynx48-1.rom"
 	ln -sf "$biosdir/camplynx/lynx48-2.rom" "$md_inst/lynx48-2.rom"
 	ln -sf "$biosdir/camplynx/lynx96-1.rom" "$md_inst/lynx96-1.rom"

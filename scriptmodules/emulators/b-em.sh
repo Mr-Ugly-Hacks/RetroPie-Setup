@@ -46,7 +46,7 @@ function install_b-em() {
 
 function configure_b-em() {
     mkRomDir "bbcmicro"
-    mkUserDir "$md_conf_root/b-em"
+    mkUserDir "$md_conf_root/bbcmicro"
 		
 	addEmulator 1 "${md_id}"  "bbcmicro" "$md_inst/b-em %ROM%"
     
