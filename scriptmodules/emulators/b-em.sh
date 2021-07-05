@@ -34,7 +34,6 @@ function build_b-em() {
 function install_b-em() {
     md_ret_files=(
         'b-em'
-		'readme.txt'
 		'README.md'
 		'hd4.hdf'
 		'hd5.hdf'
