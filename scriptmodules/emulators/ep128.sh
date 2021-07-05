@@ -53,5 +53,5 @@ function configure_ep128emu() {
 	addEmulator 1 "${md_id}"  "ep128" "$md_inst/ep128emu -ep128 -snapshot %ROM%"
     
     addSystem "ep128"
-	
+	chown -R $user:$user "$md_inst" 
 }
