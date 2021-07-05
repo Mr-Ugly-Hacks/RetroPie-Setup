@@ -44,10 +44,10 @@ function configure_creativision() {
     mkUserDir "$md_conf_root/crvision"
 	mkUserDir "$biosdir/crvision"
 	
-    addEmulator 1 "${md_id}-crvision"  "crvision" "$md_inst/creatiVision -f -b /home/aresuser/ARES/BIOS/crvision/bioscv.rom -r %ROM%"
-    addEmulator 0 "${md_id}-cslmode"  "crvision" "$md_inst/creatiVision -f -k -2 -b /home/aresuser/ARES/BIOS/crvision/cslbios.rom -r %ROM%"
-    addEmulator 0 "${md_id}-saloramanager" "crvision" "$md_inst/creatiVision -f -k -3 -b /home/aresuser/ARES/BIOS/crvision/saloram.rom -r %ROM%"
-    addEmulator 0 "${md_id}-laser2001" "crvision" "$md_inst/creatiVision -f -3 -b /home/aresuser/ARES/BIOS/crvision/laser2001.rom -r %ROM%"
+    addEmulator 1 "${md_id}-crvision"  "crvision" "$md_inst/creatiVision -f -b /home/pi/RetroPie/BIOS/crvision/bioscv.rom -r %ROM%"
+    addEmulator 0 "${md_id}-cslmode"  "crvision" "$md_inst/creatiVision -f -k -2 -b /home/pi/RetroPie/BIOS/crvision/cslbios.rom -r %ROM%"
+    addEmulator 0 "${md_id}-saloramanager" "crvision" "$md_inst/creatiVision -f -k -3 -b /home/pi/RetroPie/BIOS/crvision/saloram.rom -r %ROM%"
+    addEmulator 0 "${md_id}-laser2001" "crvision" "$md_inst/creatiVision -f -3 -b /home/pi/RetroPie/BIOS/crvision/laser2001.rom -r %ROM%"
     addSystem "crvision"
 	
 }
