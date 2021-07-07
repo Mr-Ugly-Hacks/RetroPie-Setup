@@ -41,6 +41,7 @@ function install_b-em() {
 		'roms'
 		'discs'
 		'tapes'
+		'fonts'
     )
 }
 
