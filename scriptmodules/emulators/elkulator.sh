@@ -41,6 +41,7 @@ function install_elkulator() {
 		'Readme-LINUX.txt'
 		'Readme-ROMS.txt'
 		'ddnoise'
+		'elk.cfg'
     )
 }
 
@@ -51,7 +52,7 @@ function configure_elkulator() {
 	ln -sf "$biosdir/electron" "$md_inst/roms"
 	
 	
-	addEmulator 1 "${md_id}"  "electron" "$md_inst/elkulator %ROM%"
+	addEmulator 1 "${md_id}"  "electron" "$md_inst/elkulator -tape %ROM%"
     
     addSystem "electron"
 	
